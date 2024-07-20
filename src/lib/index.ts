@@ -1,1 +1,3 @@
-// place files you want to import through the `$lib` alias in this folder.
+export const optional: <T>() => T | undefined = () => undefined;
+
+export type Option<T> = { label: string; value: T };

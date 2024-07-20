@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'm6x11plus';
+        font-style: normal;
+        font-weight: 500;
+        src: url('/fonts/m6x11plus.ttf') format('truetype');
+    }
+
+    pre > code {
+        font-family: 'm6x11plus';
+        font-size: 1.2rem;
+    }
+
+    .m6x11plus {
+        font-family: 'm6x11plus';
+        @apply text-white;
+    }
+}
