@@ -62,7 +62,7 @@
                 <h4 class="text-2xl">Fixed</h4>
                 <ul class="changelog">
                     {#each entry.fixed as item}
-                        <li>- {item}</li>
+                        <li class="text-xl">- {item}</li>
                     {/each}
                 </ul>
             {/if}
@@ -71,7 +71,7 @@
                 <h4 class="text-2xl">Removed</h4>
                 <ul class="changelog">
                     {#each entry.removed as item}
-                        <li>- {item}</li>
+                        <li class="text-xl">- {item}</li>
                     {/each}
                 </ul>
             {/if}
@@ -80,7 +80,7 @@
                 <h4 class="text-2xl">Changed</h4>
                 <ul class="changelog">
                     {#each entry.changed as item}
-                        <li>* {item}</li>
+                        <li class="text-xl">* {item}</li>
                     {/each}
                 </ul>
             {/if}
