@@ -12,6 +12,13 @@
 
     let changelog: ChangelogEntry[] = [
         {
+            version: '0.1.1',
+            date: '2024-07-21',
+            fixed: [
+                'Fixed incorrect pathing on the website'
+            ]
+        },
+        {
             version: '0.1.0',
             date: '2024-07-21',
             description: 'This is the initial release of BalaUI. Expect some bugs and missing features.',

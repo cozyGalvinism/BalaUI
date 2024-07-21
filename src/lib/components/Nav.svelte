@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { base } from '$app/paths'
     import { page } from '$app/stores'
 
     let links = [
@@ -14,7 +15,7 @@
                 {#if $page.url.pathname === link.href}
                     <p class="active">{link.text}</p>
                 {:else}
-                    <a href={link.href}>{link.text}</a>
+                    <a href="{base}/{link.href}">{link.text}</a>
                 {/if}
             </li>
         {/each}
