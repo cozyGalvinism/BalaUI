@@ -1,25 +1,24 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+    import { page } from '$app/stores'
 
     let links = [
-        { href: "/joker", text: "Create Joker" },
-    ];
+        { href: '/', text: 'Home' },
+        { href: '/joker', text: 'Create Joker' },
+    ]
 </script>
 
 <nav>
-    <div class="w-full">
-        <ul class="m6x11plus flex flex-row gap-4 text-2xl">
+    <ul class="m6x11plus flex flex-row gap-4 text-2xl">
+        {#each links as link}
             <li>
-                {#each links as link}
-                    {#if $page.url.pathname === link.href}
-                        <p class="active">{link.text}</p>
-                    {:else}
-                        <a href={link.href}>{link.text}</a>
-                    {/if}
-                {/each}
+                {#if $page.url.pathname === link.href}
+                    <p class="active">{link.text}</p>
+                {:else}
+                    <a href={link.href}>{link.text}</a>
+                {/if}
             </li>
-        </ul>
-    </div>
+        {/each}
+    </ul>
 </nav>
 
 <style lang="postcss">

@@ -9,7 +9,6 @@
     export let name: string
     export let description: string
     export let rarity: number
-    export let modId = optional<string>()
 </script>
 
 <div

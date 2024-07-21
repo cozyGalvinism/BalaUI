@@ -5,11 +5,16 @@
     import { settings } from '$lib/stores'
     import { onMount } from 'svelte'
     import '../app.css'
+    import { version } from '$app/environment'
 
     onMount(() => {
         console.log('hello fellow developer!')
     })
 </script>
+
+<svelte:head>
+    <title>BalaUI v{version}</title>
+</svelte:head>
 
 <div class="{$settings.crt ? 'crt-scanlines' : ''}" style="--scanline-opacity: 0.05"></div>
 <BalatroBackground pixelate={!$settings.smoothBackground} />
@@ -20,7 +25,7 @@
         <Settings />
     </header>
 
-    <main class="pt-2">
+    <main class="m6x11plus pt-2">
         <slot />
     </main>
 
