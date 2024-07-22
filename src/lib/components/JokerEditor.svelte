@@ -23,8 +23,8 @@
     let jokerLocText = '';
     let jokerCost = 0;
     let jokerBlueprintCompat = false;
-    let jokerEternalCompat = false;
-    let jokerPerishableCompat = false;
+    let jokerEternalCompat = true;
+    let jokerPerishableCompat = true;
 
     let jokerPreviewVariables: string[] = [];
 
@@ -79,12 +79,12 @@
             codePreview += `,\n    blueprint_compat = true`
         }
 
-        if (jokerEternalCompat) {
-            codePreview += `,\n    eternal_compat = true`
+        if (!jokerEternalCompat) {
+            codePreview += `,\n    eternal_compat = false`
         }
 
-        if (jokerPerishableCompat) {
-            codePreview += `,\n    perishable_compat = true`
+        if (!jokerPerishableCompat) {
+            codePreview += `,\n    perishable_compat = false`
         }
 
         if (jokerLocName && jokerLocText) {

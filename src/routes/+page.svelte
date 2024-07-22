@@ -12,6 +12,17 @@
 
     let changelog: ChangelogEntry[] = [
         {
+            version: '0.1.2',
+            date: '2024-07-22',
+            fixed: [
+                'Fixed underline not applying to nav links',
+            ],
+            changed: [
+                'Changed eternal_compat and perishable_compat to true by default',
+                'Changed changelog to display the dates using the browser\'s locale',
+            ]
+        },
+        {
             version: '0.1.1',
             date: '2024-07-21',
             fixed: [
@@ -29,6 +40,11 @@
             ]
         }
     ]
+
+    function formatDate(date: string) {
+        const d = new Date(date);
+        return d.toLocaleDateString();
+    }
 </script>
 
 <div class="m-2 mx-6 mb-0">
@@ -43,7 +59,7 @@
 
     {#each changelog as entry}
         <div class="pb-2">
-            <h3 class="text-3xl">{entry.version} - {entry.date}</h3>
+            <h3 class="text-3xl">{entry.version} - {formatDate(entry.date)}</h3>
             
             {#if entry.description}
                 <p class="text-xl">{entry.description}</p>
@@ -85,7 +101,7 @@
                 </ul>
             {/if}
 
-            <hr />
+            <hr class="mt-4">
         </div>
     {/each}
 </div>
