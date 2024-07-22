@@ -11,7 +11,8 @@
     import CardDescription from "./CardDescription.svelte"
     import Button from "./Button.svelte"
     import { downloadZip } from "client-zip"
-    import { label } from "three/examples/jsm/nodes/Nodes.js"
+    import type { JokerData, LocalizationEntry, PreviewVariable } from "$lib"
+    import { goto } from "$app/navigation"
 
     const localeList = [
         'de',
@@ -31,33 +32,51 @@
         'zh_TW',
     ];
 
-    let jokerKey = 'replace_me';
-    let jokerRarity = 1;
-    let jokerDiscovered = false;
-    let jokerUnlocked = true;
-    let jokerAtlas = '';
-    let jokerPosX = 0;
-    let jokerPosY = 0;
-    let jokerLocName = '';
-    let jokerLocText = '';
-    let jokerCost = 0;
-    let jokerBlueprintCompat = false;
-    let jokerEternalCompat = true;
-    let jokerPerishableCompat = true;
+    export let initialJokerData: JokerData | null = null;
+    let code = '';
 
-    let jokerPreviewVariables: PreviewVariable[] = [];
-    let jokerLocalizationEntries: LocalizationEntry[] = [];
+    function updateShareCode() {
+        const newCode = btoa(JSON.stringify({
+            key: jokerKey,
+            rarity: jokerRarity,
+            discovered: jokerDiscovered,
+            unlocked: jokerUnlocked,
+            atlas: jokerAtlas,
+            posX: jokerPosX,
+            posY: jokerPosY,
+            locName: jokerLocName,
+            locText: jokerLocText,
+            cost: jokerCost,
+            blueprintCompat: jokerBlueprintCompat,
+            eternalCompat: jokerEternalCompat,
+            perishableCompat: jokerPerishableCompat,
+            previewVariables: jokerPreviewVariables,
+            localization: jokerLocalizationEntries,
+        } as JokerData))
 
-    type PreviewVariable = {
-        name: string
-        value: string
+        if (newCode !== code) {
+            code = newCode
+
+            goto('?code=' + newCode, { replaceState: true, keepFocus: true, noScroll: true })
+        }
     }
 
-    type LocalizationEntry = {
-        name: string
-        text: string
-        locale: string
-    }
+    let jokerKey = initialJokerData?.key || 'replace_me';
+    let jokerRarity = initialJokerData?.rarity || 1;
+    let jokerDiscovered = initialJokerData?.discovered || false;
+    let jokerUnlocked = initialJokerData?.unlocked || true;
+    let jokerAtlas = initialJokerData?.atlas || '';
+    let jokerPosX = initialJokerData?.posX || 0;
+    let jokerPosY = initialJokerData?.posY || 0;
+    let jokerLocName = initialJokerData?.locName || '';
+    let jokerLocText = initialJokerData?.locText || '';
+    let jokerCost = initialJokerData?.cost || 0;
+    let jokerBlueprintCompat = initialJokerData?.blueprintCompat || false;
+    let jokerEternalCompat = initialJokerData?.eternalCompat || true;
+    let jokerPerishableCompat = initialJokerData?.perishableCompat || true;
+
+    let jokerPreviewVariables: PreviewVariable[] = initialJokerData?.previewVariables || [];
+    let jokerLocalizationEntries: LocalizationEntry[] = initialJokerData?.localization || [];
 
     let resolvedLocText = '';
     $: {
@@ -200,18 +219,22 @@ SMODS.Joker{
 
     function addVariable() {
         jokerPreviewVariables = [...jokerPreviewVariables, {name: '', value: ''}]
+        updateShareCode()
     }
 
     function removeVariable(index: number) {
         jokerPreviewVariables = jokerPreviewVariables.filter((_, i) => i !== index)
+        updateShareCode()
     }
 
     function addLocalizationEntry() {
         jokerLocalizationEntries = [...jokerLocalizationEntries, {name: '', text: '', locale: ''}]
+        updateShareCode()
     }
 
     function removeLocalizationEntry(index: number) {
         jokerLocalizationEntries = jokerLocalizationEntries.filter((_, i) => i !== index)
+        updateShareCode()
     }
 </script>
 
@@ -221,30 +244,39 @@ SMODS.Joker{
 
 <div class="m6x11plus flex flex-row gap-2">
     <div class="text-2xl flex-1 flex flex-col gap-1">
-        <LabelField name='jokerKey' label='Key:' bind:value={jokerKey} />
-        <LabelField name='jokerLocName' label='Name:' bind:value={jokerLocName} />
-        <LabelTextArea name='jokerLocText' label='Description:' bind:value={jokerLocText} />
-        <LabelDropdown name='jokerRarity' label='Rarity:' bind:value={jokerRarity} options={[{value: 1, label: 'Common'}, {value: 2, label: 'Uncommon'}, {value: 3, label: 'Rare'}, {value: 4, label: 'Legendary'}]} />
-        <LabelField name='jokerAtlas' label='Atlas:' bind:value={jokerAtlas} />
-        <LabelNumberInput name='jokerCost' label='Cost:' bind:value={jokerCost} />
+        <LabelField name='jokerKey' label='Key:' bind:value={jokerKey} on:input={updateShareCode} />
+        <LabelField name='jokerLocName' label='Name:' bind:value={jokerLocName} on:input={updateShareCode} />
+        <LabelTextArea name='jokerLocText' label='Description:' bind:value={jokerLocText} on:input={updateShareCode} />
+        <LabelDropdown name='jokerRarity' label='Rarity:' on:change={updateShareCode} bind:value={jokerRarity} options={[{value: 1, label: 'Common'}, {value: 2, label: 'Uncommon'}, {value: 3, label: 'Rare'}, {value: 4, label: 'Legendary'}]} />
+        <LabelField name='jokerAtlas' label='Atlas:' bind:value={jokerAtlas} on:input={updateShareCode} />
+        <LabelNumberInput name='jokerCost' label='Cost:' bind:value={jokerCost} on:input={updateShareCode} />
         <div class="flex flex-row gap-4">
-            <LabelNumberInput name='jokerPosX' label='Atlas X:' bind:value={jokerPosX} />
-            <LabelNumberInput name='jokerPosY' label='Atlas Y:' bind:value={jokerPosY} />
+            <LabelNumberInput name='jokerPosX' label='Atlas X:' bind:value={jokerPosX} on:input={updateShareCode} />
+            <LabelNumberInput name='jokerPosY' label='Atlas Y:' bind:value={jokerPosY} on:input={updateShareCode} />
         </div>
-        <LabelCheckbox name='jokerDiscovered' label='Discovered' bind:value={jokerDiscovered} />
-        <LabelCheckbox name='jokerUnlocked' label='Unlocked' bind:value={jokerUnlocked} />
-        <LabelCheckbox name='jokerBlueprintCompat' label='Compatible with Blueprint' bind:value={jokerBlueprintCompat} />
-        <LabelCheckbox name='jokerEternalCompat' label='Compatible with Eternal' bind:value={jokerEternalCompat} />
-        <LabelCheckbox name='jokerPerishableCompat' label='Compatible with Perishable' bind:value={jokerPerishableCompat} />
+        <LabelCheckbox name='jokerDiscovered' label='Discovered' bind:value={jokerDiscovered} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerUnlocked' label='Unlocked' bind:value={jokerUnlocked} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerBlueprintCompat' label='Compatible with Blueprint' bind:value={jokerBlueprintCompat} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerEternalCompat' label='Compatible with Eternal' bind:value={jokerEternalCompat} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerPerishableCompat' label='Compatible with Perishable' bind:value={jokerPerishableCompat} on:change={updateShareCode} />
 
         <p class="mt-2 text-3xl">Localization</p>
 
         <div class="flex flex-col gap-2">
             {#each jokerLocalizationEntries as entry, i}
                 <div class="flex flex-col gap-2">
-                    <LabelDropdown name="jokerLocalizationEntry_{i}_locale" label="Locale:" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} />
-                    <LabelField name="jokerLocalizationEntry_{i}_name" label="Name:" on:input={() => jokerLocalizationEntries = jokerLocalizationEntries} bind:value={entry.name} />
-                    <LabelTextArea name="jokerLocalizationEntry_{i}_text" label="Description:" on:input={() => jokerLocalizationEntries = jokerLocalizationEntries} bind:value={entry.text} />
+                    <LabelDropdown name="jokerLocalizationEntry_{i}_locale" label="Locale:" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} on:change={() => {
+                        jokerLocalizationEntries = jokerLocalizationEntries
+                        updateShareCode()
+                    }} />
+                    <LabelField name="jokerLocalizationEntry_{i}_name" label="Name:" on:input={() => {
+                        jokerLocalizationEntries = jokerLocalizationEntries
+                        updateShareCode()
+                    }} bind:value={entry.name} />
+                    <LabelTextArea name="jokerLocalizationEntry_{i}_text" label="Description:" on:input={() => {
+                        jokerLocalizationEntries = jokerLocalizationEntries
+                        updateShareCode()
+                    }} bind:value={entry.text} />
 
                     <Button name="removeLocalizationEntry_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeLocalizationEntry(i)}>
                         Remove Entry
@@ -262,8 +294,14 @@ SMODS.Joker{
         <div class="flex flex-col gap-2">
             {#each jokerPreviewVariables as variable, i}
                 <div class="flex flex-row gap-4">
-                    <LabelField name="jokerVariable_{i}_name" label="Name:" on:input={() => jokerPreviewVariables = jokerPreviewVariables} bind:value={variable.name} />
-                    <LabelField name="jokerVariable_{i}" label="Value:" on:input={() => jokerPreviewVariables = jokerPreviewVariables} bind:value={variable.value}>
+                    <LabelField name="jokerVariable_{i}_name" label="Name:" on:input={() => {
+                        jokerPreviewVariables = jokerPreviewVariables
+                        updateShareCode()
+                    }} bind:value={variable.name} />
+                    <LabelField name="jokerVariable_{i}" label="Value:" on:input={() => {
+                        jokerPreviewVariables = jokerPreviewVariables
+                        updateShareCode()
+                    }} bind:value={variable.value}>
                         <Button slot="after-input" class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
                             Remove
                         </Button>

@@ -12,6 +12,13 @@
 
     let changelog: ChangelogEntry[] = [
         {
+            version: '0.1.6',
+            date: '2024-07-22',
+            added: [
+                'Made the joker creation shareable using a parameter in the URL'
+            ]
+        },
+        {
             version: '0.1.5',
             date: '2024-07-22',
             changed: [

@@ -1,16 +1,10 @@
-<script>
-    import CardDescription from "$lib/components/CardDescription.svelte";
+<script lang="ts">
     import JokerEditor from "$lib/components/JokerEditor.svelte"
+    import type { PageData } from "./$types"
 
-    let joker = {
-        name: "Fibonacci",
-        description: "Each played {C:attention}Ace{},\n{C:attention}2{}, {C:attention}3{}, {C:attention}5{}, or {C:attention}8{} gives\n{C:mult}+8{} Mult when scored",
-        rarity: 2
-    };
+    export let data: PageData
 </script>
 
-<!-- <CardDescription name={joker.name} description={joker.description} rarity={joker.rarity} /> -->
-
 <div class="mt-4">
-    <JokerEditor />
+    <JokerEditor initialJokerData={data.jokerData} />
 </div>

@@ -14,6 +14,7 @@
         name="{name}"
         bind:value={value}
         class="text-black pl-2 rounded-lg h-8 shadow-[0_3px_0_0_#cccccc]"
+        on:change
     >
         {#each options as option}
             <option value={option.value}>{option.label}</option>

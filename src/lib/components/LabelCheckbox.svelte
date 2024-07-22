@@ -9,6 +9,6 @@
 </script>
 
 <div class="inline-flex flex-row gap-2">
-    <input id="{name}" class="w-6" type="checkbox" name="{name}" bind:checked={value}>
+    <input id="{name}" class="w-6" type="checkbox" name="{name}" bind:checked={value} on:change>
     <label for="{name}">{label}</label>
 </div>

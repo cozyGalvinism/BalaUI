@@ -12,5 +12,6 @@
         type="number"
         bind:value={value}
         class="text-black pl-2 rounded-lg shadow-[0_3px_0_0_#cccccc]"
+        on:input
     />
 </div>
