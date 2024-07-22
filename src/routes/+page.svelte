@@ -12,6 +12,16 @@
 
     let changelog: ChangelogEntry[] = [
         {
+            version: '0.1.3',
+            date: '2024-07-22',
+            removed: [
+                'Removed Name field from Joker creator'
+            ],
+            changed: [
+                'Changed "Localized Name" and "Localized Text" to "Name" and "Description" in the Joker creator'
+            ]
+        },
+        {
             version: '0.1.2',
             date: '2024-07-22',
             fixed: [

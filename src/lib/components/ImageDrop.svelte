@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte'
     import { writable } from 'svelte/store'
+    import JumpingText from './JumpingText.svelte'
 
     let image: string | null = null
     let imageFile: File | null = null
@@ -72,9 +73,7 @@
             <img src={$imageSrc} alt="Uploaded content" class="h-full" />
         {:else}
             <div class="text-center flex items-center h-full">
-                <p class="text-xl leading-loose">
-                    Drag and drop an image here or click to select one
-                </p>
+                <JumpingText className="text-xl" text="Drag and drop an image here or click to select one" />
             </div>
         {/if}
     </button>

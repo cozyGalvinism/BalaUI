@@ -11,8 +11,7 @@
     import CardDescription from "./CardDescription.svelte"
     import Button from "./Button.svelte"
 
-    let jokerKey = '';
-    let jokerName = '';
+    let jokerKey = 'replace_me';
     let jokerRarity = 1;
     let jokerDiscovered = false;
     let jokerUnlocked = false;
@@ -50,10 +49,6 @@
     $: {
         codePreview = `SMODS.Joker{
     key = '${jokerKey}'`
-
-        if (jokerName) {
-            codePreview += `,\n    name = '${jokerName}'`
-        }
 
         if (jokerRarity) {
             codePreview += `,\n    rarity = ${jokerRarity}`
@@ -126,7 +121,8 @@
 <div class="m6x11plus flex flex-row gap-2">
     <div class="text-2xl flex-1 flex flex-col gap-1">
         <LabelField name='jokerKey' label='Key:' bind:value={jokerKey} />
-        <LabelField name='jokerName' label='Name:' bind:value={jokerName} />
+        <LabelField name='jokerLocName' label='Name:' bind:value={jokerLocName} />
+        <LabelTextArea name='jokerLocText' label='Description:' bind:value={jokerLocText} />
         <LabelDropdown name='jokerRarity' label='Rarity:' bind:value={jokerRarity} options={[{value: 1, label: 'Common'}, {value: 2, label: 'Uncommon'}, {value: 3, label: 'Rare'}, {value: 4, label: 'Legendary'}]} />
         <LabelField name='jokerAtlas' label='Atlas:' bind:value={jokerAtlas} />
         <LabelNumberInput name='jokerCost' label='Cost:' bind:value={jokerCost} />
@@ -134,8 +130,6 @@
             <LabelNumberInput name='jokerPosX' label='Atlas X:' bind:value={jokerPosX} />
             <LabelNumberInput name='jokerPosY' label='Atlas Y:' bind:value={jokerPosY} />
         </div>
-        <LabelField name='jokerLocName' label='Localized Name:' bind:value={jokerLocName} />
-        <LabelTextArea name='jokerLocText' label='Localized Text:' bind:value={jokerLocText} />
         <LabelCheckbox name='jokerDiscovered' label='Discovered' bind:value={jokerDiscovered} />
         <LabelCheckbox name='jokerUnlocked' label='Unlocked' bind:value={jokerUnlocked} />
         <LabelCheckbox name='jokerBlueprintCompat' label='Compatible with Blueprint' bind:value={jokerBlueprintCompat} />
