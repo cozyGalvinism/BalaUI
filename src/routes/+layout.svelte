@@ -29,8 +29,10 @@
         <slot />
     </main>
 
-    <footer>
-        <slot name="footer" />
+    <footer class="m6x11plus mt-4">
+        <div class="flex flex-row gaps-4">
+            <a class="underline underline-offset-4 text-2xl" target="_blank" href="https://github.com/cozyGalvinism/BalaUI">GitHub</a>
+        </div>
     </footer>
 </div>
 
