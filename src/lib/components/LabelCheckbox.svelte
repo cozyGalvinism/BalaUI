@@ -8,7 +8,7 @@
     }
 </script>
 
-<div class="flex flex-row gap-2" on:click={flip}>
+<div class="inline-flex flex-row gap-2">
     <input id="{name}" class="w-6" type="checkbox" name="{name}" bind:checked={value}>
-    <label for="{name}" on:click={flip}>{label}</label>
+    <label for="{name}">{label}</label>
 </div>

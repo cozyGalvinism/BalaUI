@@ -11,6 +11,25 @@
     import CardDescription from "./CardDescription.svelte"
     import Button from "./Button.svelte"
     import { downloadZip } from "client-zip"
+    import { label } from "three/examples/jsm/nodes/Nodes.js"
+
+    const localeList = [
+        'de',
+        'en-us',
+        'es_419',
+        'es_ES',
+        'fr',
+        'id',
+        'it',
+        'ja',
+        'ko',
+        'nl',
+        'pl',
+        'pt_BR',
+        'ru',
+        'zh_CN',
+        'zh_TW',
+    ];
 
     let jokerKey = 'replace_me';
     let jokerRarity = 1;
@@ -223,7 +242,7 @@ SMODS.Joker{
         <div class="flex flex-col gap-2">
             {#each jokerLocalizationEntries as entry, i}
                 <div class="flex flex-col gap-2">
-                    <LabelField name="jokerLocalizationEntry_{i}_locale" label="Locale:" on:input={() => jokerLocalizationEntries = jokerLocalizationEntries} bind:value={entry.locale} />
+                    <LabelDropdown name="jokerLocalizationEntry_{i}_locale" label="Locale:" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} />
                     <LabelField name="jokerLocalizationEntry_{i}_name" label="Name:" on:input={() => jokerLocalizationEntries = jokerLocalizationEntries} bind:value={entry.name} />
                     <LabelTextArea name="jokerLocalizationEntry_{i}_text" label="Description:" on:input={() => jokerLocalizationEntries = jokerLocalizationEntries} bind:value={entry.text} />
 

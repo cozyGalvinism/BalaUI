@@ -12,6 +12,16 @@
 
     let changelog: ChangelogEntry[] = [
         {
+            version: '0.1.5',
+            date: '2024-07-22',
+            changed: [
+                'Turned the text box for the locale into a dropdown'
+            ],
+            fixed: [
+                'Fixed absurdly large clickable area of checkboxes'
+            ]
+        },
+        {
             version: '0.1.4',
             date: '2024-07-22',
             description: 'There\'s now a download button for the created joker, which will download the joker and the localization files as a zip file. Please make sure to change the PREFIX to your mod\'s prefix and adjust the localization files as such. Eventually, this will get a modal for entering the desired values.',
