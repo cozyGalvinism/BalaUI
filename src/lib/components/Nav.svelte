@@ -12,7 +12,7 @@
     <ul class="m6x11plus flex flex-row gap-4 text-2xl">
         {#each links as link}
             <li>
-                {#if $page.url.pathname === link.href}
+                {#if $page.url.pathname === {base} + link.href}
                     <p class="active">{link.text}</p>
                 {:else}
                     <a href="{base}{link.href}">{link.text}</a>
