@@ -12,6 +12,19 @@
 
     let changelog: ChangelogEntry[] = [
         {
+            version: '0.1.4',
+            date: '2024-07-22',
+            description: 'There\'s now a download button for the created joker, which will download the joker and the localization files as a zip file. Please make sure to change the PREFIX to your mod\'s prefix and adjust the localization files as such. Eventually, this will get a modal for entering the desired values.',
+            added: [
+                'Added improved localization support',
+                'Added a download button to download the created Joker as a mod (this still requires some changes to the mod itself to remove placeholder values)'
+            ],
+            changed: [
+                "Changed variables to have names",
+                "Variables are now added to the config key and returned in the loc_vars function"
+            ]
+        },
+        {
             version: '0.1.3',
             date: '2024-07-22',
             removed: [

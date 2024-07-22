@@ -10,11 +10,12 @@
     import LabelTextArea from "./LabelTextArea.svelte"
     import CardDescription from "./CardDescription.svelte"
     import Button from "./Button.svelte"
+    import { downloadZip } from "client-zip"
 
     let jokerKey = 'replace_me';
     let jokerRarity = 1;
     let jokerDiscovered = false;
-    let jokerUnlocked = false;
+    let jokerUnlocked = true;
     let jokerAtlas = '';
     let jokerPosX = 0;
     let jokerPosY = 0;
@@ -25,29 +26,103 @@
     let jokerEternalCompat = true;
     let jokerPerishableCompat = true;
 
-    let jokerPreviewVariables: string[] = [];
+    let jokerPreviewVariables: PreviewVariable[] = [];
+    let jokerLocalizationEntries: LocalizationEntry[] = [];
+
+    type PreviewVariable = {
+        name: string
+        value: string
+    }
+
+    type LocalizationEntry = {
+        name: string
+        text: string
+        locale: string
+    }
 
     let resolvedLocText = '';
     $: {
         resolvedLocText = jokerLocText;
 
         jokerPreviewVariables.forEach((variable, index) => {
-            resolvedLocText = resolvedLocText.replace(`#${index + 1}#`, variable);
+            resolvedLocText = resolvedLocText.replace(`#${index + 1}#`, variable.value);
         });
     }
 
-    function updateResolvedLocText() {
-        resolvedLocText = jokerLocText;
+    async function downloadModZip() {
+        const splitText = jokerLocText.split('\n')
+        const newText = splitText.map(line => `    '${line}'`).join(',\n                ')
 
-        jokerPreviewVariables.forEach((variable, index) => {
-            resolvedLocText = resolvedLocText.replace(`#${index + 1}#`, variable);
-        });
+        let localizationFiles = []
+
+        for (let i = 0; i < jokerLocalizationEntries.length; i++) {
+            const locEntry = jokerLocalizationEntries[i]
+            const splitText = locEntry.text.split('\n')
+            const newText = splitText.map(line => `    '${line}'`).join(',\n                ')
+            localizationFiles.push({
+                name: `MyMod/localization/${locEntry.locale}.lua`,
+                lastModified: new Date(),
+                input: `return {
+    descriptions = {
+        Joker = {
+            j_mymod_${jokerKey} = {
+                name = "${locEntry.name}",
+                text = {
+                ${newText}
+                }
+            }
+        }
+    }
+}`
+            })
+        }
+
+        const blob = await downloadZip([
+            {
+                name: 'MyMod/MyMod.lua',
+                lastModified: new Date(),
+                input: codePreview
+            },
+            {
+                name: 'MyMod/localization/default.lua',
+                lastModified: new Date(),
+                input: `return {
+    descriptions = {
+        Joker = {
+            j_mymod_${jokerKey} = {
+                name = "${jokerLocName}",
+                text = {
+                ${newText}
+                }
+            }
+        }
+    }
+}`
+            },
+            ...localizationFiles
+        ]).blob();
+
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'MyMod.zip';
+        link.click();
+        link.remove();
     }
 
     let codePreview = ''
 
     $: {
-        codePreview = `SMODS.Joker{
+        codePreview = `--- STEAMODDED HEADER
+--- MOD_NAME: MyMod
+--- MOD_ID: MyMod
+--- MOD_AUTHOR: [Your Name]
+--- MOD_DESCRIPTION: A mod
+--- VERSION: 1.0.0
+--- PREFIX: mymod
+----------------------------------------------
+------------MOD CODE -------------------------
+
+SMODS.Joker{
     key = '${jokerKey}'`
 
         if (jokerRarity) {
@@ -58,8 +133,8 @@
             codePreview += `,\n    discovered = true`
         }
 
-        if (jokerUnlocked) {
-            codePreview += `,\n    unlocked = true`
+        if (!jokerUnlocked) {
+            codePreview += `,\n    unlocked = false`
         }
 
         if (jokerAtlas) {
@@ -82,23 +157,22 @@
             codePreview += `,\n    perishable_compat = false`
         }
 
-        if (jokerLocName && jokerLocText) {
-            const splitText = jokerLocText.split('\n')
-            const newText = splitText.map(line => `        '${line}'`).join(',\n    ')
-            codePreview += `,\n    loc_txt = {\n        name = '${jokerLocName}',\n        text = {\n    ${newText} \n        }\n    }`
-        } else if (jokerLocName) {
-            codePreview += `,\n    loc_txt = {\n        name = '${jokerLocName}'\n    }`
-        } else if (jokerLocText) {
-            codePreview += `,\n    loc_txt = {\n        text = {\n    ${jokerLocText.split('\n').map(line => `        '${line}'`).join(',\n    ')} \n        }\n    }`
-        }
-
         codePreview += `,\n    pos = { x = ${jokerPosX}, y = ${jokerPosY} }`
 
-        codePreview += `,\n    loc_vars = function(self, info_queue, card)\n    end`
+        codePreview += `,\n    config = { extra = {${jokerPreviewVariables.map((variable) => `${variable.name} = '${variable.value}'`)}} }`
+
+        codePreview += `,\n    loc_vars = function(self, info_queue, card)
+        return { vars = {${jokerPreviewVariables.map((variable) => `card.ability.extra.${variable.name}`).join(', ')}} }
+    end`
 
         codePreview += `,\n    calculate = function(self, card, context)\n    end`
 
         codePreview = codePreview.trimEnd().replace(/,\s*$/, '') + '\n}'
+
+        codePreview = codePreview + `
+
+----------------------------------------------
+------------MOD CODE END----------------------`
     }
 
     function copyCode() {
@@ -106,11 +180,19 @@
     }
 
     function addVariable() {
-        jokerPreviewVariables = [...jokerPreviewVariables, '']
+        jokerPreviewVariables = [...jokerPreviewVariables, {name: '', value: ''}]
     }
 
     function removeVariable(index: number) {
         jokerPreviewVariables = jokerPreviewVariables.filter((_, i) => i !== index)
+    }
+
+    function addLocalizationEntry() {
+        jokerLocalizationEntries = [...jokerLocalizationEntries, {name: '', text: '', locale: ''}]
+    }
+
+    function removeLocalizationEntry(index: number) {
+        jokerLocalizationEntries = jokerLocalizationEntries.filter((_, i) => i !== index)
     }
 </script>
 
@@ -136,12 +218,33 @@
         <LabelCheckbox name='jokerEternalCompat' label='Compatible with Eternal' bind:value={jokerEternalCompat} />
         <LabelCheckbox name='jokerPerishableCompat' label='Compatible with Perishable' bind:value={jokerPerishableCompat} />
 
-        <p class="mt-2 text-3xl">Variables (Preview only)</p>
+        <p class="mt-2 text-3xl">Localization</p>
+
+        <div class="flex flex-col gap-2">
+            {#each jokerLocalizationEntries as entry, i}
+                <div class="flex flex-col gap-2">
+                    <LabelField name="jokerLocalizationEntry_{i}_locale" label="Locale:" on:input={() => jokerLocalizationEntries = jokerLocalizationEntries} bind:value={entry.locale} />
+                    <LabelField name="jokerLocalizationEntry_{i}_name" label="Name:" on:input={() => jokerLocalizationEntries = jokerLocalizationEntries} bind:value={entry.name} />
+                    <LabelTextArea name="jokerLocalizationEntry_{i}_text" label="Description:" on:input={() => jokerLocalizationEntries = jokerLocalizationEntries} bind:value={entry.text} />
+
+                    <Button name="removeLocalizationEntry_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeLocalizationEntry(i)}>
+                        Remove Entry
+                    </Button>
+                </div>
+            {/each}
+
+            <Button name="addLocalizationEntry" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={addLocalizationEntry}>
+                Add Entry
+            </Button>
+        </div>
+
+        <p class="mt-2 text-3xl">Variables</p>
 
         <div class="flex flex-col gap-2">
             {#each jokerPreviewVariables as variable, i}
                 <div class="flex flex-row gap-4">
-                    <LabelField name="jokerVariable_{i}" label="Variable {i + 1}:" on:input={() => jokerPreviewVariables = jokerPreviewVariables} bind:value={variable}>
+                    <LabelField name="jokerVariable_{i}_name" label="Name:" on:input={() => jokerPreviewVariables = jokerPreviewVariables} bind:value={variable.name} />
+                    <LabelField name="jokerVariable_{i}" label="Value:" on:input={() => jokerPreviewVariables = jokerPreviewVariables} bind:value={variable.value}>
                         <Button slot="after-input" class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
                             Remove
                         </Button>
@@ -153,7 +256,6 @@
                 Add Variable
             </Button>
         </div>
-
     </div>
     <div class="flex-1 flex flex-col min-h-[50rem] gap-4">
         <div class="flex flex-col items-center gap-4">
@@ -166,6 +268,9 @@
             <LineNumbers {highlighted} />
         </Highlight>
 
-        <Button name="copyCode2" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={copyCode}>Copy to clipboard</Button>
+        <div class="flex flex-row gap-4">
+            <Button name="copyCode" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={copyCode}>Copy to clipboard</Button>
+            <Button name="downloadZip" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={downloadModZip}>Download as mod</Button>
+        </div>
     </div>
 </div>
