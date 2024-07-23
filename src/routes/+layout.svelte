@@ -6,8 +6,8 @@
     import { onMount } from 'svelte'
     import '../app.css'
     import { version } from '$app/environment'
-    import type { PageData } from './$types'
     import { page } from '$app/stores'
+    import {_} from 'svelte-i18n'
 
     onMount(() => {
         console.log('hello fellow developer!')
@@ -50,7 +50,7 @@
 
     <footer class="m6x11plus mt-4">
         <div class="flex flex-row gaps-4">
-            <a class="underline underline-offset-4 text-2xl" target="_blank" href="https://github.com/cozyGalvinism/BalaUI">GitHub</a>
+            <a class="underline underline-offset-4 text-2xl" target="_blank" href="https://github.com/cozyGalvinism/BalaUI">{$_('footer.github')}</a>
         </div>
     </footer>
 </div>

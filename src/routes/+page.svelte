@@ -1,5 +1,6 @@
 <script lang="ts">
     import { version } from "$app/environment"
+    import { _ } from 'svelte-i18n'
 
     type ChangelogEntry = {
         version: string
@@ -14,85 +15,93 @@
 
     let changelog: ChangelogEntry[] = [
         {
+            version: '0.2.2',
+            date: '2024-07-23',
+            description: $_('changelog.0_2_2.description'),
+            added: [
+                $_('changelog.0_2_2.added_0'),
+            ]
+        },
+        {
             version: '0.2.1',
             date: '2024-07-23',
             added: [
-                'Added metadata for the joker and consumable creators',
+                $_('changelog.0_2_1.added_0'),
             ]
         },
         {
             version: '0.2.0',
             date: '2024-07-23',
             added: [
-                'Added a consumable creator and made it shareable (please report bugs if you find them)',
+                $_('changelog.0_2_0.added_0'),
             ]
         },
         {
             version: '0.1.6',
             date: '2024-07-22',
             added: [
-                'Made the joker creation shareable using a parameter in the URL'
+                $_('changelog.0_1_6.added_0')
             ]
         },
         {
             version: '0.1.5',
             date: '2024-07-22',
             changed: [
-                'Turned the text box for the locale into a dropdown'
+                $_('changelog.0_1_5.changed_0')
             ],
             fixed: [
-                'Fixed absurdly large clickable area of checkboxes'
+                $_('changelog.0_1_5.fixed_0')
             ]
         },
         {
             version: '0.1.4',
             date: '2024-07-22',
-            description: 'There\'s now a download button for the created joker, which will download the joker and the localization files as a zip file. Please make sure to change the PREFIX to your mod\'s prefix and adjust the localization files as such. Eventually, this will get a modal for entering the desired values.',
+            description: $_('changelog.0_1_4.description'),
             added: [
-                'Added improved localization support',
-                'Added a download button to download the created Joker as a mod (this still requires some changes to the mod itself to remove placeholder values)'
+                $_('changelog.0_1_4.added_0'),
+                $_('changelog.0_1_4.added_1')
             ],
             changed: [
-                "Changed variables to have names",
-                "Variables are now added to the config key and returned in the loc_vars function"
+                $_('changelog.0_1_4.changed_0'),
+                $_('changelog.0_1_4.changed_1')
             ]
         },
         {
             version: '0.1.3',
             date: '2024-07-22',
             removed: [
-                'Removed Name field from Joker creator'
+                $_('changelog.0_1_3.removed_0')
             ],
             changed: [
-                'Changed "Localized Name" and "Localized Text" to "Name" and "Description" in the Joker creator'
+                $_('changelog.0_1_3.changed_0')
             ]
         },
         {
             version: '0.1.2',
             date: '2024-07-22',
             fixed: [
-                'Fixed underline not applying to nav links',
+                $_('changelog.0_1_2.fixed_0'),
             ],
             changed: [
-                'Changed eternal_compat and perishable_compat to true by default',
-                'Changed changelog to display the dates using the browser\'s locale',
+                $_('changelog.0_1_2.changed_0'),
+                $_('changelog.0_1_2.changed_1'),
             ]
         },
         {
             version: '0.1.1',
             date: '2024-07-21',
             fixed: [
-                'Fixed incorrect pathing on the website'
+                $_('changelog.0_1_1.fixed_0')
             ]
         },
         {
             version: '0.1.0',
             date: '2024-07-21',
-            description: 'This is the initial release of BalaUI. Expect some bugs and missing features.',
+            description: $_('changelog.0_1_0.description'),
 
             added: [
-                'Added Joker creator',
-                'Added settings'
+                $_('changelog.0_1_0.added_0'),
+                $_('changelog.0_1_0.added_1')
             ]
         }
     ]
@@ -104,14 +113,13 @@
 </script>
 
 <div class="m-2 mx-6 mb-0">
-    <h1 class="text-5xl text-balatro-edition">BalaUI v{version}</h1>
+    <h1 class="text-5xl text-balatro-edition">{$_('page.index.title', {values: {version}})}</h1>
 
     <p class="py-2 text-2xl leading-[0.8]">
-        A set of modding utilities for <a href="https://store.steampowered.com/app/2379780/Balatro/">Balatro</a> 
-        and <a href="https://github.com/Steamopollys/Steamodded/">Steamodded</a>.
+        {$_("page.index.description")}
     </p>
 
-    <h2 class="text-4xl py-4">Changelog</h2>
+    <h2 class="text-4xl py-4">{$_('page.index.changelog.title')}</h2>
 
     {#each changelog as entry}
         <div class="pb-2">
@@ -122,7 +130,7 @@
             {/if}
 
             {#if entry.added}
-                <h4 class="text-2xl">Added</h4>
+                <h4 class="text-2xl">{$_('page.index.changelog.added')}</h4>
                 <ul class="changelog">
                     {#each entry.added as item}
                         <li class="text-xl">+ {item}</li>
@@ -131,7 +139,7 @@
             {/if}
 
             {#if entry.fixed}
-                <h4 class="text-2xl">Fixed</h4>
+                <h4 class="text-2xl">{$_('page.index.changelog.fixed')}</h4>
                 <ul class="changelog">
                     {#each entry.fixed as item}
                         <li class="text-xl">- {item}</li>
@@ -140,7 +148,7 @@
             {/if}
 
             {#if entry.removed}
-                <h4 class="text-2xl">Removed</h4>
+                <h4 class="text-2xl">{$_('page.index.changelog.removed')}</h4>
                 <ul class="changelog">
                     {#each entry.removed as item}
                         <li class="text-xl">- {item}</li>
@@ -149,7 +157,7 @@
             {/if}
 
             {#if entry.changed}
-                <h4 class="text-2xl">Changed</h4>
+                <h4 class="text-2xl">{$_('page.index.changelog.changed')}</h4>
                 <ul class="changelog">
                     {#each entry.changed as item}
                         <li class="text-xl">* {item}</li>

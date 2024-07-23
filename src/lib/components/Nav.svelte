@@ -1,12 +1,12 @@
 <script lang="ts">
     import { base } from '$app/paths'
     import { page } from '$app/stores'
-    import { onMount } from 'svelte'
+    import { _ } from 'svelte-i18n';
 
     let links = [
-        { href: '/', text: 'Home' },
-        { href: '/joker', text: 'Create Joker' },
-        { href: '/consumable', text: 'Create Consumable' }
+        { href: '/', text: $_('nav.home') },
+        { href: '/joker', text: $_('nav.joker') },
+        { href: '/consumable', text: $_('nav.consumable') },
     ]
 </script>
 

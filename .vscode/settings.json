@@ -1,5 +1,28 @@
 {
     "css.customData": [
         ".vscode/tailwind.json"
-    ]
+    ],
+    "i18n-ally.localesPaths": [
+        "src/lib/i18n/locales"
+    ],
+    "i18n-ally.sourceLanguage": "en",
+    "i18n-ally.enabledParsers": ["json"],
+    "i18n-ally.keystyle": "nested",
+    "i18n-ally.refactor.templates": [
+        {
+            "include": [
+                "src/**/*.svelte",
+                "src/lib/components/**/*.svelte"
+            ],
+            "template": "{$_('{key}{args}')}"
+        }
+    ],
+    "i18n-ally.extract.ignoredByFiles": {
+        "src/routes/+page.svelte": [
+            "+ {item}",
+            "- {item}",
+            "* {item}"
+        ]
+    }
+
 }

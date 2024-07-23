@@ -14,6 +14,7 @@
     import LabelTextArea from "./LabelTextArea.svelte"
     import LabelNumberInput from "./LabelNumberInput.svelte"
     import LabelCheckbox from "./LabelCheckbox.svelte"
+    import { _ } from 'svelte-i18n'
 
     export let initialConsumableData: ConsumableData | null = null;
 
@@ -63,10 +64,19 @@
         }
     }
 
-    const consumableSets = [
-        'Tarot',
-        'Planet',
-        'Spectral'
+    const consumableSets: Option<string>[] = [
+        {
+            label: $_('balatro.cardTypes.tarot'),
+            value: 'Tarot'
+        },
+        {
+            label: $_('balatro.cardTypes.planet'),
+            value: 'Planet'
+        },
+        {
+            label: $_('balatro.cardTypes.spectral'),
+            value: 'Spectral'
+        }
     ]
 
     let resolvedLocText = '';
@@ -238,78 +248,78 @@ SMODS.Consumable{
 
 <div class="flex flex-row gap-2">
     <div class="text-2xl flex-1 flex flex-col gap-1">
-        <LabelField name="consumableKey" label="Key:" bind:value={consumableKey} on:input={updateShareCode} />
-        <LabelField name="consumableName" label="Name:" bind:value={consumableLocName} on:input={updateShareCode} />
-        <LabelTextArea name="consumableLocText" label='Description:' bind:value={consumableLocText} on:input={updateShareCode} />
-        <LabelDropdown name="consumableSet" label="Set:" bind:value={consumableSet} on:change={updateShareCode} options={consumableSets.map(set => {return {label: set, value: set}})} />
-        <LabelField name="consumableAtlas" label="Atlas:" bind:value={consumableAtlas} on:input={updateShareCode} />
-        <LabelNumberInput name="consumableCost" label="Cost:" bind:value={consumableCost} on:input={updateShareCode} />
+        <LabelField name="consumableKey" label="{$_('editor.key')}" bind:value={consumableKey} on:input={updateShareCode} />
+        <LabelField name="consumableName" label="{$_('editor.name')}" bind:value={consumableLocName} on:input={updateShareCode} />
+        <LabelTextArea name="consumableLocText" label='{$_('editor.description')}' bind:value={consumableLocText} on:input={updateShareCode} />
+        <LabelDropdown name="consumableSet" label="{$_('editor.consumable.set')}" bind:value={consumableSet} on:change={updateShareCode} options={consumableSets} />
+        <LabelField name="consumableAtlas" label="{$_('editor.atlas')}" bind:value={consumableAtlas} on:input={updateShareCode} />
+        <LabelNumberInput name="consumableCost" label="{$_('editor.cost')}" bind:value={consumableCost} on:input={updateShareCode} />
         <div class="flex flex-row gap-4">
-            <LabelNumberInput name="consumablePosX" label="Atlas X:" bind:value={consumablePosX} on:input={updateShareCode} />
-            <LabelNumberInput name="consumablePosY" label="Atlas Y:" bind:value={consumablePosY} on:input={updateShareCode} />
+            <LabelNumberInput name="consumablePosX" label="{$_('editor.atlasX')}" bind:value={consumablePosX} on:input={updateShareCode} />
+            <LabelNumberInput name="consumablePosY" label="{$_('editor.atlasY')}" bind:value={consumablePosY} on:input={updateShareCode} />
         </div>
-        <LabelCheckbox name='consumableDiscovered' label='Discovered' bind:value={consumableDiscovered} on:change={updateShareCode} />
-        <LabelCheckbox name='consumableUnlocked' label='Unlocked' bind:value={consumableUnlocked} on:change={updateShareCode} />
-        <LabelCheckbox name='consumableHidden' label='Hidden' bind:value={consumableHidden} on:change={updateShareCode} />
+        <LabelCheckbox name='consumableDiscovered' label='{$_('editor.discovered')}' bind:value={consumableDiscovered} on:change={updateShareCode} />
+        <LabelCheckbox name='consumableUnlocked' label='{$_('editor.unlocked')}' bind:value={consumableUnlocked} on:change={updateShareCode} />
+        <LabelCheckbox name='consumableHidden' label='{$_('editor.consumable.hidden')}' bind:value={consumableHidden} on:change={updateShareCode} />
 
         {#if consumableHidden}
-            <p class="mt-2 text-3xl">Hidden Settings</p>
-            <LabelDropdown name="consumableSoulSet" label="Set:" bind:value={consumableSoulSet} on:input={updateShareCode} options={consumableSets.map(set => {return {label: set, value: set}})} />
-            <LabelNumberInput name="consumableSoulRate" label="Rate of appearing:" max={1.0} step={0.001} bind:value={consumableSoulRate} on:input={updateShareCode} />
-            <LabelCheckbox name="consumableCanRepeatSoul" label="Can repeat" bind:value={consumableCanRepeatSoul} on:change={updateShareCode} />
+            <p class="mt-2 text-3xl">{$_('editor.consumable.hiddenSettingsTitle')}</p>
+            <LabelDropdown name="consumableSoulSet" label="{$_('editor.consumable.soulSet')}" bind:value={consumableSoulSet} on:input={updateShareCode} options={consumableSets} />
+            <LabelNumberInput name="consumableSoulRate" label="{$_('editor.consumable.soulRate')}" max={1.0} step={0.001} bind:value={consumableSoulRate} on:input={updateShareCode} />
+            <LabelCheckbox name="consumableCanRepeatSoul" label="{$_('editor.consumable.canRepeat')}" bind:value={consumableCanRepeatSoul} on:change={updateShareCode} />
         {/if}
 
-        <p class="mt-2 text-3xl">Localization</p>
+        <p class="mt-2 text-3xl">{$_('editor.localization.title')}</p>
 
         <div class="flex flex-col gap-2">
             {#each consumableLocalizationEntries as entry, i}
                 <div class="flex flex-col gap-2">
-                    <LabelDropdown name="consumableLocalizationEntry_{i}_locale" label="Locale:" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} on:change={() => {
+                    <LabelDropdown name="consumableLocalizationEntry_{i}_locale" label="{$_('editor.localization.locale')}" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} on:change={() => {
                         consumableLocalizationEntries = consumableLocalizationEntries
                         updateShareCode()
                     }} />
-                    <LabelField name="consumableLocalizationEntry_{i}_name" label="Name:" on:input={() => {
+                    <LabelField name="consumableLocalizationEntry_{i}_name" label="{$_('editor.name')}" on:input={() => {
                         consumableLocalizationEntries = consumableLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.name} />
-                    <LabelTextArea name="consumableLocalizationEntry_{i}_text" label="Description:" on:input={() => {
+                    <LabelTextArea name="consumableLocalizationEntry_{i}_text" label="{$_('editor.description')}" on:input={() => {
                         consumableLocalizationEntries = consumableLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.text} />
 
                     <Button name="removeLocalizationEntry_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeLocalizationEntry(i)}>
-                        Remove Entry
+                        {$_('editor.localization.remove')}
                     </Button>
                 </div>
             {/each}
 
             <Button name="addLocalizationEntry" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={addLocalizationEntry}>
-                Add Entry
+                {$_('editor.localization.add')}
             </Button>
         </div>
 
-        <p class="mt-2 text-3xl">Variables</p>
+        <p class="mt-2 text-3xl">{$_('editor.variables.title')}</p>
 
         <div class="flex flex-col gap-2">
             {#each consumablePreviewVariables as variable, i}
                 <div class="flex flex-row gap-4">
-                    <LabelField name="consumableVariable_{i}_name" label="Name:" on:input={() => {
+                    <LabelField name="consumableVariable_{i}_name" label="{$_('editor.name')}" on:input={() => {
                         consumablePreviewVariables = consumablePreviewVariables
                         updateShareCode()
                     }} bind:value={variable.name} />
-                    <LabelField name="consumableVariable_{i}" label="Value:" on:input={() => {
+                    <LabelField name="consumableVariable_{i}" label="{$_('editor.value')}" on:input={() => {
                         consumablePreviewVariables = consumablePreviewVariables
                         updateShareCode()
                     }} bind:value={variable.value}>
                         <Button slot="after-input" class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
-                            Remove
+                            {$_('editor.variables.remove')}
                         </Button>
                     </LabelField>
                 </div>
             {/each}
 
             <Button name="addVariable" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={addVariable}>
-                Add Variable
+                {$_('editor.variables.add')}
             </Button>
         </div>
     </div>
@@ -319,11 +329,11 @@ SMODS.Consumable{
 
             <CardDescription name={consumableLocName} description={resolvedLocText}>
                 {#if consumableSet === 'Tarot'}
-                    <Tag text="Tarot" colour="#a782d1" shadowColour="#8668a7" />
+                    <Tag text="{$_('balatro.tarot')}" colour="#a782d1" shadowColour="#8668a7" />
                 {:else if consumableSet === 'Planet'}
-                    <Tag text="Planet" colour="#13afce" shadowColour="#0f8ca5" />
+                    <Tag text="{$_('balatro.planet')}" colour="#13afce" shadowColour="#0f8ca5" />
                 {:else if consumableSet === 'Spectral'}
-                    <Tag text="Spectral" colour="#4584fa" shadowColour="#376ac8" />
+                    <Tag text="{$_('balatro.spectral')}" colour="#4584fa" shadowColour="#376ac8" />
                 {/if}
             </CardDescription>
         </div>
@@ -333,8 +343,8 @@ SMODS.Consumable{
         </Highlight>
 
         <div class="flex flex-row gap-4">
-            <Button name="copyCode" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={copyCode}>Copy to clipboard</Button>
-            <Button name="downloadZip" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={downloadModZip}>Download as mod</Button>
+            <Button name="copyCode" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={copyCode}>{$_('editor.copyClipboard')}</Button>
+            <Button name="downloadZip" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={downloadModZip}>{$_('editor.downloadMod')}</Button>
         </div>
     </div>
 </div>

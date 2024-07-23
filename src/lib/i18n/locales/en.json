@@ -1,0 +1,127 @@
+{
+  "page": {
+    "index": {
+      "description": "A set of modding utilities for Balatro and Steamodded.",
+      "title": "BalaUI v{version}",
+      "changelog": {
+        "title": "Changelog",
+        "added": "Added",
+        "fixed": "Fixed",
+        "removed": "Removed",
+        "changed": "Changed"
+      }
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "joker": "Create Joker",
+    "consumable": "Create Consumable"
+  },
+  "changelog": {
+    "0_2_1": {
+      "added_0": "Added metadata for the joker and consumable creators"
+    },
+    "0_2_0": {
+      "added_0": "Added a consumable creator and made it shareable (please report bugs if you find them)"
+    },
+    "0_1_6": {
+      "added_0": "Made the joker creation shareable using a parameter in the URL"
+    },
+    "0_1_5": {
+      "changed_0": "Turned the text box for the locale into a dropdown",
+      "fixed_0": "Fixed absurdly large clickable area of checkboxes"
+    },
+    "0_1_4": {
+      "description": "There's now a download button for the created joker, which will download the joker and the localization files as a zip file. Please make sure to change the PREFIX to your mod's prefix and adjust the localization files as such. Eventually, this will get a modal for entering the desired values.",
+      "added_0": "Added improved localization support",
+      "added_1": "Added a download button to download the created Joker as a mod (this still requires some changes to the mod itself to remove placeholder values)",
+      "changed_0": "Changed variables to have names",
+      "changed_1": "Variables are now added to the config key and returned in the loc_vars function"
+    },
+    "0_1_3": {
+      "removed_0": "Removed Name field from Joker creator",
+      "changed_0": "Changed \"Localized Name\" and \"Localized Text\" to \"Name\" and \"Description\" in the Joker creator"
+    },
+    "0_1_2": {
+      "fixed_0": "Fixed underline not applying to nav links",
+      "changed_0": "Changed eternal_compat and perishable_compat to true by default",
+      "changed_1": "Changed changelog to display the dates using the browser's locale"
+    },
+    "0_1_1": {
+      "fixed_0": "Fixed incorrect pathing on the website"
+    },
+    "0_1_0": {
+      "description": "This is the initial release of BalaUI. Expect some bugs and missing features.",
+      "added_0": "Added Joker creator",
+      "added_1": "Added settings"
+    },
+    "0_2_2": {
+      "added_0": "Added i18n support to the website",
+      "description": "This update adds i18n translation support to the site, which means you can now help translating BalaUI to different languages. At the moment, I'm still figuring out possibilities for how to implement different fonts for certain languages, so if you have an idea on how to solve that, it would be much appreciated."
+    }
+  },
+  "editor": {
+    "consumable": {
+      "set": "Set:",
+      "hidden": "Hidden",
+      "soulSet": "Set:",
+      "soulRate": "Rate of appearing:",
+      "canRepeat": "Can repeat",
+      "hiddenSettingsTitle": "Hidden Settings"
+    },
+    "localization": {
+      "title": "Localization",
+      "locale": "Locale:",
+      "remove": "Remove Entry",
+      "add": "Add Entry"
+    },
+    "atlas": "Atlas:",
+    "cost": "Cost:",
+    "atlasX": "Atlas X:",
+    "atlasY": "Atlas Y:",
+    "discovered": "Discovered",
+    "unlocked": "Unlocked",
+    "key": "Key:",
+    "name": "Name:",
+    "description": "Description:",
+    "variables": {
+      "title": "Variables",
+      "remove": "Remove",
+      "add": "Add Variable"
+    },
+    "value": "Value:",
+    "copyClipboard": "Copy to clipboard",
+    "downloadMod": "Download as mod",
+    "joker": {
+      "rarity": "Rarity:",
+      "blueprintCompat": "Compatible with Blueprint",
+      "eternalCompat": "Compatible with Eternal",
+      "perishableCompat": "Compatible with Perishable"
+    }
+  },
+  "balatro": {
+    "cardTypes": {
+      "tarot": "Tarot",
+      "planet": "Planet",
+      "spectral": "Spectral"
+    },
+    "rarities": {
+      "common": "Common",
+      "uncommon": "Uncommon",
+      "rare": "Rare",
+      "legendary": "Legendary"
+    }
+  },
+  "settings": {
+    "crt": "CRT",
+    "smoothBackground": "Smooth Background"
+  },
+  "imageDrop": {
+    "text": "Drag and drop an image here or click to select one",
+    "alt": "Uploaded content",
+    "ariaLabel": "Drop image here"
+  },
+  "footer": {
+    "github": "GitHub"
+  }
+}

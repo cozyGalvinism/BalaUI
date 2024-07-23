@@ -11,9 +11,10 @@
     import CardDescription from "./CardDescription.svelte"
     import Button from "./Button.svelte"
     import { downloadZip } from "client-zip"
-    import { localeList, type JokerData, type LocalizationEntry, type PreviewVariable } from "$lib"
+    import { localeList, type JokerData, type LocalizationEntry, type PreviewVariable, type Option } from "$lib"
     import { goto } from "$app/navigation"
     import Tag from "./Tag.svelte"
+    import { _ } from 'svelte-i18n'
 
     export let initialJokerData: JokerData | null = null;
     let code = '';
@@ -43,6 +44,13 @@
             goto('?code=' + newCode, { replaceState: true, keepFocus: true, noScroll: true })
         }
     }
+
+    const jokerRarities: Option<string>[] = [
+        { value: '1', label: $_('balatro.rarities.common') },
+        { value: '2', label: $_('balatro.rarities.uncommon') },
+        { value: '3', label: $_('balatro.rarities.rare') },
+        { value: '4', label: $_('balatro.rarities.legendary') },
+    ]
 
     let jokerKey = initialJokerData?.key || 'replace_me';
     let jokerRarity = initialJokerData?.rarity || 1;
@@ -227,73 +235,73 @@ SMODS.Joker{
 
 <div class="m6x11plus flex flex-row gap-2">
     <div class="text-2xl flex-1 flex flex-col gap-1">
-        <LabelField name='jokerKey' label='Key:' bind:value={jokerKey} on:input={updateShareCode} />
-        <LabelField name='jokerLocName' label='Name:' bind:value={jokerLocName} on:input={updateShareCode} />
-        <LabelTextArea name='jokerLocText' label='Description:' bind:value={jokerLocText} on:input={updateShareCode} />
-        <LabelDropdown name='jokerRarity' label='Rarity:' on:change={updateShareCode} bind:value={jokerRarity} options={[{value: 1, label: 'Common'}, {value: 2, label: 'Uncommon'}, {value: 3, label: 'Rare'}, {value: 4, label: 'Legendary'}]} />
-        <LabelField name='jokerAtlas' label='Atlas:' bind:value={jokerAtlas} on:input={updateShareCode} />
-        <LabelNumberInput name='jokerCost' label='Cost:' bind:value={jokerCost} on:input={updateShareCode} />
+        <LabelField name='jokerKey' label='{$_('editor.key')}' bind:value={jokerKey} on:input={updateShareCode} />
+        <LabelField name='jokerLocName' label='{$_('editor.name')}' bind:value={jokerLocName} on:input={updateShareCode} />
+        <LabelTextArea name='jokerLocText' label='{$_('editor.description')}' bind:value={jokerLocText} on:input={updateShareCode} />
+        <LabelDropdown name='jokerRarity' label='{$_('editor.joker.rarity')}' on:change={updateShareCode} bind:value={jokerRarity} options={[{value: 1, label: 'Common'}, {value: 2, label: 'Uncommon'}, {value: 3, label: 'Rare'}, {value: 4, label: 'Legendary'}]} />
+        <LabelField name='jokerAtlas' label='{$_('editor.atlas')}' bind:value={jokerAtlas} on:input={updateShareCode} />
+        <LabelNumberInput name='jokerCost' label='{$_('editor.cost')}' bind:value={jokerCost} on:input={updateShareCode} />
         <div class="flex flex-row gap-4">
-            <LabelNumberInput name='jokerPosX' label='Atlas X:' bind:value={jokerPosX} on:input={updateShareCode} />
-            <LabelNumberInput name='jokerPosY' label='Atlas Y:' bind:value={jokerPosY} on:input={updateShareCode} />
+            <LabelNumberInput name='jokerPosX' label='{$_('editor.atlasX')}' bind:value={jokerPosX} on:input={updateShareCode} />
+            <LabelNumberInput name='jokerPosY' label='{$_('editor.atlasY')}' bind:value={jokerPosY} on:input={updateShareCode} />
         </div>
-        <LabelCheckbox name='jokerDiscovered' label='Discovered' bind:value={jokerDiscovered} on:change={updateShareCode} />
-        <LabelCheckbox name='jokerUnlocked' label='Unlocked' bind:value={jokerUnlocked} on:change={updateShareCode} />
-        <LabelCheckbox name='jokerBlueprintCompat' label='Compatible with Blueprint' bind:value={jokerBlueprintCompat} on:change={updateShareCode} />
-        <LabelCheckbox name='jokerEternalCompat' label='Compatible with Eternal' bind:value={jokerEternalCompat} on:change={updateShareCode} />
-        <LabelCheckbox name='jokerPerishableCompat' label='Compatible with Perishable' bind:value={jokerPerishableCompat} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerDiscovered' label='{$_('editor.discovered')}' bind:value={jokerDiscovered} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerUnlocked' label='{$_('editor.unlocked')}' bind:value={jokerUnlocked} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerBlueprintCompat' label='{$_('editor.joker.blueprintCompat')}' bind:value={jokerBlueprintCompat} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerEternalCompat' label='{$_('editor.joker.eternalCompat')}' bind:value={jokerEternalCompat} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerPerishableCompat' label='{$_('editor.joker.perishableCompat')}' bind:value={jokerPerishableCompat} on:change={updateShareCode} />
 
-        <p class="mt-2 text-3xl">Localization</p>
+        <p class="mt-2 text-3xl">{$_('editor.localization.title')}</p>
 
         <div class="flex flex-col gap-2">
             {#each jokerLocalizationEntries as entry, i}
                 <div class="flex flex-col gap-2">
-                    <LabelDropdown name="jokerLocalizationEntry_{i}_locale" label="Locale:" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} on:change={() => {
+                    <LabelDropdown name="jokerLocalizationEntry_{i}_locale" label="{$_('editor.localization.locale')}" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} on:change={() => {
                         jokerLocalizationEntries = jokerLocalizationEntries
                         updateShareCode()
                     }} />
-                    <LabelField name="jokerLocalizationEntry_{i}_name" label="Name:" on:input={() => {
+                    <LabelField name="jokerLocalizationEntry_{i}_name" label="{$_('editor.name')}" on:input={() => {
                         jokerLocalizationEntries = jokerLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.name} />
-                    <LabelTextArea name="jokerLocalizationEntry_{i}_text" label="Description:" on:input={() => {
+                    <LabelTextArea name="jokerLocalizationEntry_{i}_text" label="{$_('editor.description')}" on:input={() => {
                         jokerLocalizationEntries = jokerLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.text} />
 
                     <Button name="removeLocalizationEntry_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeLocalizationEntry(i)}>
-                        Remove Entry
+                        {$_('editor.localization.remove')}
                     </Button>
                 </div>
             {/each}
 
             <Button name="addLocalizationEntry" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={addLocalizationEntry}>
-                Add Entry
+                {$_('editor.localization.add')}
             </Button>
         </div>
 
-        <p class="mt-2 text-3xl">Variables</p>
+        <p class="mt-2 text-3xl">{$_('editor.variables.title')}</p>
 
         <div class="flex flex-col gap-2">
             {#each jokerPreviewVariables as variable, i}
                 <div class="flex flex-row gap-4">
-                    <LabelField name="jokerVariable_{i}_name" label="Name:" on:input={() => {
+                    <LabelField name="jokerVariable_{i}_name" label="{$_('editor.name')}" on:input={() => {
                         jokerPreviewVariables = jokerPreviewVariables
                         updateShareCode()
                     }} bind:value={variable.name} />
-                    <LabelField name="jokerVariable_{i}" label="Value:" on:input={() => {
+                    <LabelField name="jokerVariable_{i}" label="{$_('editor.value')}" on:input={() => {
                         jokerPreviewVariables = jokerPreviewVariables
                         updateShareCode()
                     }} bind:value={variable.value}>
                         <Button slot="after-input" class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
-                            Remove
+                            {$_('editor.variables.remove')}
                         </Button>
                     </LabelField>
                 </div>
             {/each}
 
             <Button name="addVariable" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={addVariable}>
-                Add Variable
+                {$_('editor.variables.add')}
             </Button>
         </div>
     </div>
@@ -319,8 +327,8 @@ SMODS.Joker{
         </Highlight>
 
         <div class="flex flex-row gap-4">
-            <Button name="copyCode" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={copyCode}>Copy to clipboard</Button>
-            <Button name="downloadZip" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={downloadModZip}>Download as mod</Button>
+            <Button name="copyCode" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={copyCode}>{$_('editor.copyClipboard')}</Button>
+            <Button name="downloadZip" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={downloadModZip}>{$_('editor.downloadMod')}</Button>
         </div>
     </div>
 </div>
