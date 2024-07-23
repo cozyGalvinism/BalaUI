@@ -11,26 +11,9 @@
     import CardDescription from "./CardDescription.svelte"
     import Button from "./Button.svelte"
     import { downloadZip } from "client-zip"
-    import type { JokerData, LocalizationEntry, PreviewVariable } from "$lib"
+    import { localeList, type JokerData, type LocalizationEntry, type PreviewVariable } from "$lib"
     import { goto } from "$app/navigation"
-
-    const localeList = [
-        'de',
-        'en-us',
-        'es_419',
-        'es_ES',
-        'fr',
-        'id',
-        'it',
-        'ja',
-        'ko',
-        'nl',
-        'pl',
-        'pt_BR',
-        'ru',
-        'zh_CN',
-        'zh_TW',
-    ];
+    import Tag from "./Tag.svelte"
 
     export let initialJokerData: JokerData | null = null;
     let code = '';
@@ -68,8 +51,8 @@
     let jokerAtlas = initialJokerData?.atlas || '';
     let jokerPosX = initialJokerData?.posX || 0;
     let jokerPosY = initialJokerData?.posY || 0;
-    let jokerLocName = initialJokerData?.locName || '';
-    let jokerLocText = initialJokerData?.locText || '';
+    let jokerLocName = initialJokerData?.locName || 'Placeholder Joker';
+    let jokerLocText = initialJokerData?.locText || '{C:mult}+4{} Mult';
     let jokerCost = initialJokerData?.cost || 0;
     let jokerBlueprintCompat = initialJokerData?.blueprintCompat || false;
     let jokerEternalCompat = initialJokerData?.eternalCompat || true;
@@ -318,7 +301,17 @@ SMODS.Joker{
         <div class="flex flex-col items-center gap-4">
             <ImageDrop />
 
-            <CardDescription name={jokerLocName} description={resolvedLocText} rarity={jokerRarity} />
+            <CardDescription name={jokerLocName} description={resolvedLocText}>
+                {#if jokerRarity == 1}
+                    <Tag text="Common" colour="#009dff" shadowColour="#007ecc" />
+                {:else if jokerRarity == 2}
+                    <Tag text="Uncommon" colour="#4BC292" shadowColour="#3c9b75" />
+                {:else if jokerRarity == 3}
+                    <Tag text="Rare" colour="#fe5f55" shadowColour="#cb4c44" />
+                {:else if jokerRarity == 4}
+                    <Tag text="Legendary" colour="#b26cbb" shadowColour="#8e5696"  />
+                {/if}
+            </CardDescription>
         </div>
 
         <Highlight language={lua} code={codePreview} let:highlighted>

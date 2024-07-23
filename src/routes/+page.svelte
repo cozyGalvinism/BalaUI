@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { version } from "$app/environment"
+
     type ChangelogEntry = {
         version: string
         date: string
@@ -11,6 +13,13 @@
     }
 
     let changelog: ChangelogEntry[] = [
+        {
+            version: '0.2.0',
+            date: '2024-07-23',
+            added: [
+                'Added a consumable creator and made it shareable (please report bugs if you find them)',
+            ]
+        },
         {
             version: '0.1.6',
             date: '2024-07-22',
@@ -88,7 +97,7 @@
 </script>
 
 <div class="m-2 mx-6 mb-0">
-    <h1 class="text-5xl">BalaUI</h1>
+    <h1 class="text-5xl text-balatro-edition">BalaUI v{version}</h1>
 
     <p class="py-2 text-2xl leading-[0.8]">
         A set of modding utilities for <a href="https://store.steampowered.com/app/2379780/Balatro/">Balatro</a> 

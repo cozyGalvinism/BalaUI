@@ -6,6 +6,7 @@
     let links = [
         { href: '/', text: 'Home' },
         { href: '/joker', text: 'Create Joker' },
+        { href: '/consumable', text: 'Create Consumable' }
     ]
 </script>
 

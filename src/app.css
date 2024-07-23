@@ -19,4 +19,92 @@
         font-family: 'm6x11plus';
         @apply text-white;
     }
+
+    .text-balatro-edition {
+        animation: edition 5s linear infinite;
+    }
+
+    .bg-balatro-edition {
+        animation: edition-bg 5s linear infinite;
+    }
+
+    .text-balatro-dark-edition {
+        animation: dark-edition 5s linear infinite;
+    }
+
+    .bg-balatro-dark-edition {
+        animation: dark-edition-bg 5s linear infinite;
+    }
+
+    @keyframes dark-edition {
+        0% {
+            color: rgb(153, 153, 204);
+        }
+        25% {
+            color: rgb(194, 179, 163);
+        }
+        50% {
+            color: rgb(204, 204, 153);
+        }
+        75% {
+            color: rgb(163, 179, 194);
+        }
+        100% {
+            color: rgb(153, 153, 204);
+        }
+    }
+
+    @keyframes dark-edition-bg {
+        0% {
+            background-color: rgb(153, 153, 204);
+        }
+        25% {
+            background-color: rgb(194, 179, 163);
+        }
+        50% {
+            background-color: rgb(204, 204, 153);
+        }
+        75% {
+            background-color: rgb(163, 179, 194);
+        }
+        100% {
+            background-color: rgb(153, 153, 204);
+        }
+    }
+
+    @keyframes edition-bg {
+        0% {
+            background-color: rgb(179, 230, 230);
+        }
+        25% {
+            background-color: rgb(214, 194, 235);
+        }
+        50% {
+            background-color: rgb(230, 179, 230);
+        }
+        75% {
+            background-color: rgb(194, 235, 194);
+        }
+        100% {
+            background-color: rgb(179, 230, 230);
+        }
+    }
+
+    @keyframes edition {
+        0% {
+            color: rgb(179, 230, 230);
+        }
+        25% {
+            color: rgb(214, 194, 235);
+        }
+        50% {
+            color: rgb(230, 179, 230);
+        }
+        75% {
+            color: rgb(194, 235, 194);
+        }
+        100% {
+            color: rgb(179, 230, 230);
+        }
+    }
 }
