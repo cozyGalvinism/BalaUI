@@ -329,11 +329,11 @@ SMODS.Consumable{
 
             <CardDescription name={consumableLocName} description={resolvedLocText}>
                 {#if consumableSet === 'Tarot'}
-                    <Tag text="{$_('balatro.tarot')}" colour="#a782d1" shadowColour="#8668a7" />
+                    <Tag text="{$_('balatro.cardTypes.tarot')}" colour="#a782d1" shadowColour="#8668a7" />
                 {:else if consumableSet === 'Planet'}
-                    <Tag text="{$_('balatro.planet')}" colour="#13afce" shadowColour="#0f8ca5" />
+                    <Tag text="{$_('balatro.cardTypes.planet')}" colour="#13afce" shadowColour="#0f8ca5" />
                 {:else if consumableSet === 'Spectral'}
-                    <Tag text="{$_('balatro.spectral')}" colour="#4584fa" shadowColour="#376ac8" />
+                    <Tag text="{$_('balatro.cardTypes.spectral')}" colour="#4584fa" shadowColour="#376ac8" />
                 {/if}
             </CardDescription>
         </div>
