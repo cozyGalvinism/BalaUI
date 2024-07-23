@@ -31,6 +31,7 @@
         <meta property="og:description" content="A set of modding utilities for Balatro and Steamodded" />
     {/if}
     <meta property="og:url" content="{$page.url.toString()}" />
+    <meta property="og:image" content="https://cozygalvinism.github.io/BalaUI/favicon.png" />
     <meta name="author" content="cozyGalvinism">
     <meta property="og:type" content="website" />
 </svelte:head>
