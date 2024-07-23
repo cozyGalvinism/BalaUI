@@ -70,7 +70,7 @@
         on:click={() => fileInput?.click()}
     >
         {#if image}
-            <img src={$imageSrc} alt="Uploaded content" class="h-full" />
+            <img src={$imageSrc} alt="Uploaded content" class="h-full preview" />
         {:else}
             <div class="text-center flex items-center h-full">
                 <JumpingText className="text-xl" text="Drag and drop an image here or click to select one" />
@@ -85,3 +85,9 @@
         bind:this={fileInput}
     />
 </div>
+
+<style>
+    .preview {
+        image-rendering: pixelated;
+    }
+</style>
