@@ -84,7 +84,7 @@
         resolvedLocText = consumableLocText;
 
         consumablePreviewVariables.forEach((variable, index) => {
-            resolvedLocText = resolvedLocText.replace(`#${index + 1}#`, variable.value);
+            resolvedLocText = resolvedLocText.replace(new RegExp(`#${index + 1}#`, 'g'), variable.value);
         });
     }
 

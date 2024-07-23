@@ -58,6 +58,9 @@
     "0_2_2": {
       "added_0": "Added i18n support to the website",
       "description": "This update adds i18n translation support to the site, which means you can now help translating BalaUI to different languages. At the moment, I'm still figuring out possibilities for how to implement different fonts for certain languages, so if you have an idea on how to solve that, it would be much appreciated."
+    },
+    "0_2_3": {
+      "fixed_0": "Fixed variables only being replaced on the first occurence"
     }
   },
   "editor": {
