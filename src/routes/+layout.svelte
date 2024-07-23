@@ -14,6 +14,8 @@
 
 <svelte:head>
     <title>BalaUI v{version}</title>
+    <meta name="author" content="cozyGalvinism">
+    <meta name="description" content="A set of modding utilities for Balatro and Steamodded">
 </svelte:head>
 
 <div class="{$settings.crt ? 'crt-scanlines' : ''}" style="--scanline-opacity: 0.05"></div>

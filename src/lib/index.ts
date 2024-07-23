@@ -70,3 +70,9 @@ export type LocalizationEntry = {
     locale: string;
 }
 
+export function stripFormatting(text: string) {
+    const regex = /{[A-Za-z0-9:., ]*}/g
+
+    return text.replace(regex, '')
+}
+
