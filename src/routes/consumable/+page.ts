@@ -1,4 +1,4 @@
-import type { ConsumableData } from '$lib';
+import { stripFormatting, type ConsumableData } from '$lib';
 
 export function load({ url }) {
     let consumableObj: ConsumableData | null = null
@@ -8,7 +8,15 @@ export function load({ url }) {
         consumableObj = JSON.parse(atob(decodeURIComponent(code))) as ConsumableData
     }
 
+    if (consumableObj === null) {
+        return {
+            consumableData: null
+        };
+    }
+
     return {
-        consumableData: consumableObj
+        consumableData: consumableObj,
+        title: `Consumable - ${consumableObj?.locName}`,
+        description: stripFormatting(consumableObj?.locText ?? '')
     };
 }

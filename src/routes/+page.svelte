@@ -14,6 +14,13 @@
 
     let changelog: ChangelogEntry[] = [
         {
+            version: '0.2.1',
+            date: '2024-07-23',
+            added: [
+                'Added metadata for the joker and consumable creators',
+            ]
+        },
+        {
             version: '0.2.0',
             date: '2024-07-23',
             added: [

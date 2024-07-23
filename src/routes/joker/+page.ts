@@ -1,4 +1,4 @@
-import type { JokerData } from '$lib';
+import { stripFormatting, type JokerData } from '$lib';
 
 export function load({ url }) {
     let jokerObj: JokerData | null = null
@@ -8,7 +8,15 @@ export function load({ url }) {
         jokerObj = JSON.parse(atob(decodeURIComponent(code))) as JokerData
     }
 
+    if (jokerObj === null) {
+        return {
+            jokerData: null
+        };
+    }
+    
     return {
-        jokerData: jokerObj
+        jokerData: jokerObj,
+        title: `Joker - ${jokerObj?.locName}`,
+        description: stripFormatting(jokerObj?.locText ?? '')
     };
 }

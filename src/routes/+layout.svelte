@@ -6,6 +6,8 @@
     import { onMount } from 'svelte'
     import '../app.css'
     import { version } from '$app/environment'
+    import type { PageData } from './$types'
+    import { page } from '$app/stores'
 
     onMount(() => {
         console.log('hello fellow developer!')
@@ -13,9 +15,18 @@
 </script>
 
 <svelte:head>
-    <title>BalaUI v{version}</title>
+    {#if $page.data.title}
+        <title>{$page.data.title} - BalaUI v{version}</title>
+    {:else}
+        <title>BalaUI v{version}</title>
+    {/if}
+
+    {#if $page.data.description}
+        <meta name="description" content={$page.data.description} />
+    {:else}
+        <meta name="description" content="A set of modding utilities for Balatro and Steamodded" />
+    {/if}
     <meta name="author" content="cozyGalvinism">
-    <meta name="description" content="A set of modding utilities for Balatro and Steamodded">
 </svelte:head>
 
 <div class="{$settings.crt ? 'crt-scanlines' : ''}" style="--scanline-opacity: 0.05"></div>
