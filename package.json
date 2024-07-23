@@ -28,6 +28,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@vercel/speed-insights": "^1.0.12",
 		"client-zip": "^2.4.5",
 		"three": "^0.166.1"
 	}

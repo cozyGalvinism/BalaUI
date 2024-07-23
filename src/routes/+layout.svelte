@@ -8,6 +8,9 @@
     import { version } from '$app/environment'
     import { page } from '$app/stores'
     import {_} from 'svelte-i18n'
+    import { injectSpeedInsights } from '@vercel/speed-insights'
+
+    injectSpeedInsights()
 
     onMount(() => {
         console.log('hello fellow developer!')
