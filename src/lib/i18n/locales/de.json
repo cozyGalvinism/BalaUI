@@ -1,0 +1,133 @@
+{
+  "balatro": {
+    "cardTypes": {
+      "planet": "Planet",
+      "spectral": "Geister",
+      "tarot": "Tarot"
+    },
+    "rarities": {
+      "common": "Gewöhnlich",
+      "legendary": "Legendär",
+      "rare": "Selten",
+      "uncommon": "Ungewöhnlich"
+    }
+  },
+  "changelog": {
+    "0_1_0": {
+      "added_0": "Joker-Ersteller hinzugefügt",
+      "added_1": "Einstellungen hinzugefügt",
+      "description": "Dies ist die erste Version von BalaUI. \nErwarten Sie einige Fehler und fehlende Funktionen."
+    },
+    "0_1_1": {
+      "fixed_0": "Falsche Pfadangaben auf der Website behoben"
+    },
+    "0_1_2": {
+      "changed_0": "Eternal_compat und perishable_compat wurden standardmäßig auf „true“ geändert",
+      "changed_1": "Das Changelog wurde geändert, um die Daten anhand des Gebietsschemas des Browsers anzuzeigen",
+      "fixed_0": "Problem behoben, bei dem die Unterstreichung nicht auf Navigationslinks angewendet wurde"
+    },
+    "0_1_3": {
+      "changed_0": "„Lokalisierter Name“ und „Lokalisierter Text“ wurden im Joker-Ersteller in „Name“ und „Beschreibung“ geändert",
+      "removed_0": "Das Feld „Name“ wurde aus dem Joker-Ersteller entfernt"
+    },
+    "0_1_4": {
+      "added_0": "Verbesserte Lokalisierungsunterstützung hinzugefügt",
+      "added_1": "Es wurde ein Download-Button hinzugefügt, um den erstellten Joker als Mod herunterzuladen (dies erfordert noch einige Änderungen am Mod selbst, um Platzhalterwerte zu entfernen)",
+      "changed_0": "Variablen wurden so geändert, dass sie Namen haben",
+      "changed_1": "Dem config-Schlüssel werden nun Variablen hinzugefügt und in der Funktion loc_vars zurückgegeben",
+      "description": "Für den erstellten Joker gibt es jetzt einen Download-Button, der den Joker und die Lokalisierungsdateien als ZIP-Datei herunterlädt. \nBitte stellen Sie sicher, dass Sie das Präfix in das Präfix Ihres Mods ändern und die Lokalisierungsdateien entsprechend anpassen. \nLetztendlich wird daraus ein Modal zur Eingabe der gewünschten Werte."
+    },
+    "0_1_5": {
+      "changed_0": "Das Textfeld für die Sprache wurde in ein Dropdown-Menü umgewandelt",
+      "fixed_0": "Der absurd große anklickbare Bereich der Kontrollkästchen wurde behoben"
+    },
+    "0_1_6": {
+      "added_0": "Die Joker-Erstellung kann nun mithilfe eines Parameters in der URL geteilt werden"
+    },
+    "0_2_0": {
+      "added_0": "Es wurde ein Ersteller für Verbrauchsmaterialien hinzugefügt und teilbar gemacht (bitte melden Sie Fehler, wenn Sie welche finden)."
+    },
+    "0_2_1": {
+      "added_0": "Metadaten für die Ersteller von Jokern und Verbrauchsgütern hinzugefügt"
+    },
+    "0_2_2": {
+      "added_0": "i18n-Unterstützung zur Website hinzugefügt",
+      "description": "Dieses Update fügt der Website i18n-Übersetzungsunterstützung hinzu, was bedeutet, dass Sie jetzt bei der Übersetzung von BalaUI in verschiedene Sprachen helfen können. \nIm Moment überlege ich immer noch, wie ich unterschiedliche Schriftarten für bestimmte Sprachen implementieren kann. Wenn Sie also eine Idee haben, wie das Problem gelöst werden kann, wäre ich Ihnen sehr dankbar."
+    },
+    "0_2_3": {
+      "fixed_0": "Behoben: Variablen werden nur beim ersten Auftreten ersetzt"
+    },
+    "0_2_4": {
+      "added_0": "Deutsche Übersetzung hinzugefügt"
+    }
+  },
+  "editor": {
+    "atlas": "Atlas:",
+    "atlasX": "Atlas X:",
+    "atlasY": "Atlas Y:",
+    "consumable": {
+      "canRepeat": "Kann wiederholt werden",
+      "hidden": "Versteckt",
+      "hiddenSettingsTitle": "Versteckt-Einstellungen",
+      "set": "Set:",
+      "soulRate": "Erscheinungswahrscheinlichkeit:",
+      "soulSet": "Set:"
+    },
+    "copyClipboard": "Kopieren",
+    "cost": "Kosten:",
+    "description": "Beschreibung:",
+    "discovered": "Gefunden",
+    "downloadMod": "Als Mod herunterladen",
+    "joker": {
+      "blueprintCompat": "Kompatibel mit Bauplan",
+      "eternalCompat": "Kompatibel mit Ewig",
+      "perishableCompat": "Kompatibel mit Verderblich",
+      "rarity": "Seltenheit:"
+    },
+    "key": "Schlüssel:",
+    "localization": {
+      "add": "Eintrag hinzufügen",
+      "locale": "Sprache:",
+      "remove": "Eintrag entfernen",
+      "title": "Lokalisierung"
+    },
+    "name": "Name:",
+    "unlocked": "Freigeschaltet",
+    "value": "Wert:",
+    "variables": {
+      "add": "Variable hinzufügen",
+      "remove": "Entfernen",
+      "title": "Variablen"
+    }
+  },
+  "footer": {
+    "github": "GitHub"
+  },
+  "imageDrop": {
+    "alt": "Hochgeladener Inhalt",
+    "ariaLabel": "Lege das Bild hier ab",
+    "text": "Ziehe und lege das Bild hier ab oder klicke um eines auszuwählen"
+  },
+  "nav": {
+    "consumable": "Erstelle Verbrauchsgegenstand",
+    "home": "Home",
+    "joker": "Erstelle Joker"
+  },
+  "page": {
+    "index": {
+      "changelog": {
+        "added": "Hinzugefügt",
+        "changed": "Geändert",
+        "fixed": "Behoben",
+        "removed": "Entfernt",
+        "title": "Changelog"
+      },
+      "description": "Eine Reihe von Modding-Helfern für Balatro und Steamodded.",
+      "title": "BalaUI v{version}"
+    }
+  },
+  "settings": {
+    "crt": "CRT",
+    "smoothBackground": "Sanfter Hintergrund"
+  }
+}

@@ -61,6 +61,9 @@
     },
     "0_2_3": {
       "fixed_0": "Fixed variables only being replaced on the first occurence"
+    },
+    "0_2_4": {
+      "added_0": "Added German translation"
     }
   },
   "editor": {
