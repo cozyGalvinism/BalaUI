@@ -19,6 +19,7 @@ A set of modding utilities for [Balatro](https://store.steampowered.com/app/2379
 - [ ] Resizing images
 - [ ] Add colorblind support
 - [ ] Add support for generating localization files
+- [x] i18n support
 
 *Order does not signify priority!*
 
