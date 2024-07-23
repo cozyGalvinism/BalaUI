@@ -17,7 +17,7 @@
 <svelte:head>
     {#if $page.data.title}
         <title>{$page.data.title} - BalaUI v{version}</title>
-        <meta property="og:title" content="{$page.data.title}" />
+        <meta property="og:title" content="{$page.data.title} - BalaUI v{version}" />
     {:else}
         <title>BalaUI v{version}</title>
         <meta property="og:title" content="BalaUI v{version}" />
@@ -30,6 +30,7 @@
         <meta name="description" content="A set of modding utilities for Balatro and Steamodded" />
         <meta property="og:description" content="A set of modding utilities for Balatro and Steamodded" />
     {/if}
+    <meta property="og:url" content="{$page.url.toString()}" />
     <meta name="author" content="cozyGalvinism">
     <meta property="og:type" content="website" />
 </svelte:head>
