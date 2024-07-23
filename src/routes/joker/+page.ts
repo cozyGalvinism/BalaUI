@@ -1,5 +1,7 @@
 import { stripFormatting, type JokerData } from '$lib';
 
+export const prerender = false;
+
 export function load({ url }) {
     let jokerObj: JokerData | null = null
 
@@ -13,7 +15,7 @@ export function load({ url }) {
             jokerData: null
         };
     }
-    
+
     return {
         jokerData: jokerObj,
         title: `Joker - ${jokerObj?.locName}`,

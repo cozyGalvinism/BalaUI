@@ -1,5 +1,7 @@
 import { stripFormatting, type ConsumableData } from '$lib';
 
+export const prerender = false;
+
 export function load({ url }) {
     let consumableObj: ConsumableData | null = null
 
