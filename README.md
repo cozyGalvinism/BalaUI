@@ -13,7 +13,7 @@ A set of modding utilities for [Balatro](https://store.steampowered.com/app/2379
     - [x] Implement preview for variables
   - [ ] Parsing jokers from code
 - [x] Creating consumables
-- [ ] Creating vouchers
+- [x] Creating vouchers
 - [ ] Creating decks
 - [ ] Creating atlases
 - [ ] Resizing images
