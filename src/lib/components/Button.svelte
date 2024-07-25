@@ -12,7 +12,7 @@
 </script>
 
 <button class="colorable-button {className}" style="--btn-color: {color}; --btn-hover-color: {hoverColor}; --btn-active-color: {activeColor};" name={name} on:click={action}>
-    <slot></slot>
+    <slot />
 </button>
 
 <style lang="postcss">
@@ -22,14 +22,14 @@
         @apply rounded-lg p-2 px-4 w-fit mb-[3px];
     }
 
-    .colorable-button:active {
-        background-color: var(--btn-active-color);
+    .colorable-button:hover {
+        background-color: var(--btn-hover-color);
         box-shadow: 0px 3px 0px 0px var(--btn-active-color);
         @apply rounded-lg p-2 px-4 w-fit mb-[3px];
     }
 
-    .colorable-button:hover {
-        background-color: var(--btn-hover-color);
+    .colorable-button:active {
+        background-color: var(--btn-active-color);
         box-shadow: 0px 3px 0px 0px var(--btn-active-color);
         @apply rounded-lg p-2 px-4 w-fit mb-[3px];
     }

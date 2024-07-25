@@ -1,7 +1,6 @@
 <script lang="ts">
     import Highlight, { LineNumbers } from "svelte-highlight";
     import LabelField from "./LabelField.svelte"
-    import lua from "svelte-highlight/languages/lua"
     import atomOneDark from "svelte-highlight/styles/atom-one-dark";
     import LabelDropdown from "./LabelDropdown.svelte"
     import ImageDrop from "./ImageDrop.svelte"
@@ -11,10 +10,17 @@
     import CardDescription from "./CardDescription.svelte"
     import Button from "./Button.svelte"
     import { downloadZip } from "client-zip"
-    import { localeList, type JokerData, type LocalizationEntry, type PreviewVariable, type Option } from "$lib"
+    import { localeList, type JokerData, type LocalizationEntry, type PreviewVariable, type Option, type CodeFile } from "$lib"
     import { goto } from "$app/navigation"
     import Tag from "./Tag.svelte"
     import { _ } from 'svelte-i18n'
+    import TabView from "./TabView.svelte"
+    import TabHead from "./TabHead.svelte"
+    import TabHeadItem from "./TabHeadItem.svelte"
+    import TabContentItem from "./TabContentItem.svelte"
+    import TabbedHighlight from "./TabbedHighlight.svelte"
+    import json from "svelte-highlight/languages/json"
+    import lua from "svelte-highlight/languages/lua"
 
     export let initialJokerData: JokerData | null = null;
     let code = '';
@@ -69,6 +75,8 @@
     let jokerPreviewVariables: PreviewVariable[] = initialJokerData?.previewVariables || [];
     let jokerLocalizationEntries: LocalizationEntry[] = initialJokerData?.localization || [];
 
+    let activeTabValue: number
+
     let resolvedLocText = '';
     $: {
         resolvedLocText = jokerLocText;
@@ -86,23 +94,19 @@
 
         for (let i = 0; i < jokerLocalizationEntries.length; i++) {
             const locEntry = jokerLocalizationEntries[i]
-            const splitText = locEntry.text.split('\n')
-            const newText = splitText.map(line => `    '${line}'`).join(',\n                ')
             localizationFiles.push({
-                name: `MyMod/localization/${locEntry.locale}.lua`,
+                name: `MyMod/localization/${locEntry.locale}.json`,
                 lastModified: new Date(),
-                input: `return {
-    descriptions = {
-        Joker = {
-            j_mymod_${jokerKey} = {
-                name = "${locEntry.name}",
-                text = {
-                ${newText}
-                }
-            }
-        }
-    }
-}`
+                input: JSON.stringify({
+                    descriptions: {
+                        Joker: {
+                            [`j_mymod_${jokerKey}`]: {
+                                name: locEntry.name,
+                                text: locEntry.text.split('\n')
+                            }
+                        }
+                    }
+                }, null, 2)
             })
         }
 
@@ -113,20 +117,18 @@
                 input: codePreview
             },
             {
-                name: 'MyMod/localization/default.lua',
+                name: 'MyMod/localization/default.json',
                 lastModified: new Date(),
-                input: `return {
-    descriptions = {
-        Joker = {
-            j_mymod_${jokerKey} = {
-                name = "${jokerLocName}",
-                text = {
-                ${newText}
-                }
-            }
-        }
-    }
-}`
+                input: JSON.stringify({
+                        descriptions: {
+                            Joker: {
+                                [`j_mymod_${jokerKey}`]: {
+                                    name: jokerLocName,
+                                    text: jokerLocText.split('\n')
+                                }
+                            }
+                        }
+                    }, null, 2)
             },
             ...localizationFiles
         ]).blob();
@@ -139,6 +141,7 @@
     }
 
     let codePreview = ''
+    let previewFiles: CodeFile[] = []
 
     $: {
         codePreview = `--- STEAMODDED HEADER
@@ -202,6 +205,44 @@ SMODS.Joker{
 
 ----------------------------------------------
 ------------MOD CODE END----------------------`
+
+        previewFiles = [
+            {
+                fileName: 'MyMod/MyMod.lua',
+                content: codePreview,
+                lang: lua
+            },
+            {
+                fileName: 'MyMod/localization/default.json',
+                content: JSON.stringify({
+                    descriptions: {
+                        Joker: {
+                            [`j_mymod_${jokerKey}`]: {
+                                name: jokerLocName,
+                                text: jokerLocText.split('\n')
+                            }
+                        }
+                    }
+                }, null, 2),
+                lang: json
+            },
+            ...jokerLocalizationEntries.map(locEntry => {
+                return {
+                    fileName: `MyMod/localization/${locEntry.locale}.json`,
+                    content: JSON.stringify({
+                        descriptions: {
+                            Joker: {
+                                [`j_mymod_${jokerKey}`]: {
+                                    name: locEntry.name,
+                                    text: locEntry.text.split('\n')
+                                }
+                            }
+                        }
+                    }, null, 2),
+                    lang: json
+                }
+            })
+        ]
     }
 
     function copyCode() {
@@ -225,6 +266,11 @@ SMODS.Joker{
 
     function removeLocalizationEntry(index: number) {
         jokerLocalizationEntries = jokerLocalizationEntries.filter((_, i) => i !== index)
+
+        if (activeTabValue === index + 1) {
+            activeTabValue = 0
+        }
+
         updateShareCode()
     }
 </script>
@@ -322,13 +368,7 @@ SMODS.Joker{
             </CardDescription>
         </div>
 
-        <Highlight language={lua} code={codePreview} let:highlighted>
-            <LineNumbers {highlighted} />
-        </Highlight>
-
-        <div class="flex flex-row gap-4">
-            <Button name="copyCode" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={copyCode}>{$_('editor.copyClipboard')}</Button>
-            <Button name="downloadZip" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={downloadModZip}>{$_('editor.downloadMod')}</Button>
-        </div>
+        <TabbedHighlight files={previewFiles} bind:activeTabValue={activeTabValue} />
+        <Button name="downloadZip" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={downloadModZip}>{$_('editor.downloadMod')}</Button>
     </div>
 </div>

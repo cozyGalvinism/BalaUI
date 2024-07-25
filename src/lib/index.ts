@@ -1,6 +1,8 @@
+import type { LanguageType } from "svelte-highlight/languages";
+
 export const localeList = [
     'de',
-    'en-us',
+    // 'en-us',
     'es_419',
     'es_ES',
     'fr',
@@ -19,6 +21,12 @@ export const localeList = [
 export const optional: <T>() => T | undefined = () => undefined;
 
 export type Option<T> = { label: string; value: T };
+
+export type CodeFile = {
+    fileName: string;
+    content: string;
+    lang: LanguageType<string>;
+}
 
 export type JokerData = {
     key: string;

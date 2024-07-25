@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation"
-    import { localeList, type ConsumableData, type Option } from "$lib"
+    import { localeList, type CodeFile, type ConsumableData, type Option } from "$lib"
     import atomOneDark from "svelte-highlight/styles/atom-one-dark"
     import LabelField from "./LabelField.svelte"
     import LabelDropdown from "./LabelDropdown.svelte"
@@ -8,6 +8,7 @@
     import CardDescription from "./CardDescription.svelte"
     import Highlight, { LineNumbers } from "svelte-highlight"
     import lua from "svelte-highlight/languages/lua"
+    import json from "svelte-highlight/languages/json"
     import Button from "./Button.svelte"
     import { downloadZip } from "client-zip"
     import Tag from "./Tag.svelte"
@@ -15,6 +16,7 @@
     import LabelNumberInput from "./LabelNumberInput.svelte"
     import LabelCheckbox from "./LabelCheckbox.svelte"
     import { _ } from 'svelte-i18n'
+    import TabbedHighlight from "./TabbedHighlight.svelte"
 
     export let initialConsumableData: ConsumableData | null = null;
 
@@ -79,6 +81,8 @@
         }
     ]
 
+    let activeTabValue: number
+
     let resolvedLocText = '';
     $: {
         resolvedLocText = consumableLocText;
@@ -89,6 +93,7 @@
     }
 
     let codePreview = ''
+    let previewFiles: CodeFile[] = []
     $: {
         codePreview = `--- STEAMODDED HEADER
 --- MOD_NAME: MyMod
@@ -155,6 +160,28 @@ SMODS.Consumable{
 
 ----------------------------------------------
 ------------MOD CODE END----------------------`
+
+        previewFiles = [
+            {
+                fileName: 'MyMod/MyMod.lua',
+                content: codePreview,
+                lang: lua
+            },
+            {
+                fileName: 'MyMod/localization/default.json',
+                content: JSON.stringify({
+                    description: {
+                        [consumableSet]: {
+                            [`c_mymod_${consumableKey}`]: {
+                                name: consumableLocName,
+                                text: consumableLocText.split('\n')
+                            }
+                        }
+                    }
+                }, null, 2),
+                lang: json
+            }
+        ]
     }
 
     function addVariable() {
@@ -178,30 +205,23 @@ SMODS.Consumable{
     }
 
     async function downloadModZip() {
-        const splitText = consumableLocText.split('\n')
-        const newText = splitText.map(line => `    '${line}'`).join(',\n                ')
-
         let localizationFiles = []
 
         for (let i = 0; i < consumableLocalizationEntries.length; i++) {
             const locEntry = consumableLocalizationEntries[i]
-            const splitText = locEntry.text.split('\n')
-            const newText = splitText.map(line => `    '${line}'`).join(',\n                ')
             localizationFiles.push({
-                name: `MyMod/localization/${locEntry.locale}.lua`,
+                name: `MyMod/localization/${locEntry.locale}.json`,
                 lastModified: new Date(),
-                input: `return {
-    descriptions = {
-        ${consumableSet} = {
-            c_mymod_${consumableKey} = {
-                name = "${locEntry.name}",
-                text = {
-                ${newText}
-                }
-            }
-        }
-    }
-}`
+                input: JSON.stringify({
+                    description: {
+                        [consumableSet]: {
+                            [`c_mymod_${consumableKey}`]: {
+                                name: locEntry.name,
+                                text: locEntry.text.split('\n')
+                            }
+                        }
+                    }
+                }, null, 2)
             })
         }
 
@@ -212,20 +232,18 @@ SMODS.Consumable{
                 input: codePreview
             },
             {
-                name: 'MyMod/localization/default.lua',
+                name: 'MyMod/localization/default.json',
                 lastModified: new Date(),
-                input: `return {
-    descriptions = {
-        ${consumableSet} = {
-            c_mymod_${consumableKey} = {
-                name = "${consumableLocName}",
-                text = {
-                ${newText}
-                }
-            }
-        }
-    }
-}`
+                input: JSON.stringify({
+                    description: {
+                        [consumableSet]: {
+                            [`c_mymod_${consumableKey}`]: {
+                                name: consumableLocName,
+                                text: consumableLocText.split('\n')
+                            }
+                        }
+                    }
+                }, null, 2)
             },
             ...localizationFiles
         ]).blob();
@@ -338,13 +356,7 @@ SMODS.Consumable{
             </CardDescription>
         </div>
 
-        <Highlight language={lua} code={codePreview} let:highlighted>
-            <LineNumbers {highlighted} />
-        </Highlight>
-
-        <div class="flex flex-row gap-4">
-            <Button name="copyCode" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={copyCode}>{$_('editor.copyClipboard')}</Button>
-            <Button name="downloadZip" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={downloadModZip}>{$_('editor.downloadMod')}</Button>
-        </div>
+        <TabbedHighlight files={previewFiles} bind:activeTabValue={activeTabValue} />
+        <Button name="downloadZip" color="#4BC292" hoverColor="#6fcea8" activeColor="#3c9b75" action={downloadModZip}>{$_('editor.downloadMod')}</Button>
     </div>
 </div>
