@@ -4,6 +4,9 @@
     import JumpingText from './JumpingText.svelte'
     import {_} from 'svelte-i18n'
 
+    export let width: number = 284
+    export let height: number = 380
+
     let image: string | null = null
     let imageFile: File | null = null
     let fileInput: HTMLInputElement | null = null
@@ -61,9 +64,10 @@
         id="drop-zone"
         class="{image
             ? ''
-            : 'p-4 border-2 border-dashed border-gray-500 bg-[#00000050]'} cursor-pointer rounded-lg w-[284px] h-[380px]"
+            : 'p-4 border-2 border-dashed border-gray-500 bg-[#00000050]'} cursor-pointer rounded-lg drop-zone"
         aria-dropeffect="copy"
         tabindex="0"
+        style="--image-drop-width: {width}px; --image-drop-height: {height}px;"
         aria-label="{$_('imageDrop.ariaLabel')}"
         on:drop={handleImageDrop}
         on:dragover={(event) => event.preventDefault()}
@@ -90,5 +94,10 @@
 <style>
     .preview {
         image-rendering: pixelated;
+    }
+
+    .drop-zone {
+        width: var(--image-drop-width);
+        height: var(--image-drop-height);
     }
 </style>

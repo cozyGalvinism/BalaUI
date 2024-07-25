@@ -47,11 +47,11 @@
         }
     }
 
-    const jokerRarities: Option<string>[] = [
-        { value: '1', label: $_('balatro.rarities.common') },
-        { value: '2', label: $_('balatro.rarities.uncommon') },
-        { value: '3', label: $_('balatro.rarities.rare') },
-        { value: '4', label: $_('balatro.rarities.legendary') },
+    const jokerRarities: Option<number>[] = [
+        { value: 1, label: $_('balatro.rarities.common') },
+        { value: 2, label: $_('balatro.rarities.uncommon') },
+        { value: 3, label: $_('balatro.rarities.rare') },
+        { value: 4, label: $_('balatro.rarities.legendary') },
     ]
 
     let jokerKey = initialJokerData?.key || 'replace_me';
@@ -187,7 +187,7 @@ SMODS.Joker{
 
         codePreview += `,\n    pos = { x = ${jokerPosX}, y = ${jokerPosY} }`
 
-        codePreview += `,\n    config = { extra = {${jokerPreviewVariables.map((variable) => `${variable.name} = '${variable.value}'`)}} }`
+        codePreview += `,\n    config = { extra = {${jokerPreviewVariables.map((variable) => `${variable.name} = '${variable.value}'`).join(', ')}} }`
 
         codePreview += `,\n    loc_vars = function(self, info_queue, card)
         return { vars = {${jokerPreviewVariables.map((variable) => `card.ability.extra.${variable.name}`).join(', ')}} }
@@ -280,7 +280,7 @@ SMODS.Joker{
         <LabelField name='jokerKey' label='{$_('editor.key')}' bind:value={jokerKey} on:input={updateShareCode} />
         <LabelField name='jokerLocName' label='{$_('editor.name')}' bind:value={jokerLocName} on:input={updateShareCode} />
         <LabelTextArea name='jokerLocText' label='{$_('editor.description')}' bind:value={jokerLocText} on:input={updateShareCode} />
-        <LabelDropdown name='jokerRarity' label='{$_('editor.joker.rarity')}' on:change={updateShareCode} bind:value={jokerRarity} options={[{value: 1, label: 'Common'}, {value: 2, label: 'Uncommon'}, {value: 3, label: 'Rare'}, {value: 4, label: 'Legendary'}]} />
+        <LabelDropdown name='jokerRarity' label='{$_('editor.joker.rarity')}' on:change={updateShareCode} bind:value={jokerRarity} options={jokerRarities} />
         <LabelField name='jokerAtlas' label='{$_('editor.atlas')}' bind:value={jokerAtlas} on:input={updateShareCode} />
         <LabelNumberInput name='jokerCost' label='{$_('editor.cost')}' bind:value={jokerCost} on:input={updateShareCode} />
         <div class="flex flex-row gap-4">
@@ -353,13 +353,13 @@ SMODS.Joker{
 
             <CardDescription name={jokerLocName} description={resolvedLocText}>
                 {#if jokerRarity == 1}
-                    <Tag text="Common" colour="#009dff" shadowColour="#007ecc" />
+                    <Tag text="{$_('balatro.rarities.common')}" colour="#009dff" shadowColour="#007ecc" />
                 {:else if jokerRarity == 2}
-                    <Tag text="Uncommon" colour="#4BC292" shadowColour="#3c9b75" />
+                    <Tag text="{$_('balatro.rarities.uncommon')}" colour="#4BC292" shadowColour="#3c9b75" />
                 {:else if jokerRarity == 3}
-                    <Tag text="Rare" colour="#fe5f55" shadowColour="#cb4c44" />
+                    <Tag text="{$_('balatro.rarities.rare')}" colour="#fe5f55" shadowColour="#cb4c44" />
                 {:else if jokerRarity == 4}
-                    <Tag text="Legendary" colour="#b26cbb" shadowColour="#8e5696"  />
+                    <Tag text="{$_('balatro.rarities.legendary')}" colour="#b26cbb" shadowColour="#8e5696"  />
                 {/if}
             </CardDescription>
         </div>

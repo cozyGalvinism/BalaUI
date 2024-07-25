@@ -10,7 +10,8 @@
       "legendary": "Legendär",
       "rare": "Selten",
       "uncommon": "Ungewöhnlich"
-    }
+    },
+    "voucher": "Gutschein"
   },
   "changelog": {
     "0_1_0": {
@@ -66,6 +67,12 @@
     },
     "0_2_6": {
       "changed_0": "Daten innerhalb des Share-Codes werden nun mit dem Deflate-Algorithmus komprimiert bevor sie in Base64 kodiert werden"
+    },
+    "0_3_0": {
+      "added_0": "Gutschein-Ersteller hinzugefügt",
+      "fixed_0": "Es wurde ein Rechtschreibfehler in den Lokalisierungsdateien behoben, bei dem die oberste Ebene „descriptions“ falsch als „description“ geschrieben wurde.",
+      "fixed_1": "Fehlende Übersetzungen für Kartenbeschreibungs-Tags (z. B. Seltenheit) behoben.",
+      "fixed_2": "Fehlende Kommas nach dem config-Schlüssel in der Codevorschau behoben"
     }
   },
   "editor": {
@@ -105,6 +112,13 @@
       "add": "Variable hinzufügen",
       "remove": "Entfernen",
       "title": "Variablen"
+    },
+    "voucher": {
+      "requires": {
+        "add": "Gutschein-Abhängigkeit hinzufügen",
+        "remove": "Entfernen",
+        "title": "Abhängigkeiten"
+      }
     }
   },
   "footer": {
@@ -116,9 +130,10 @@
     "text": "Ziehe und lege das Bild hier ab oder klicke um eines auszuwählen"
   },
   "nav": {
-    "consumable": "Erstelle Verbrauchsgegenstand",
+    "consumable": "Verbrauchsgegenstand",
     "home": "Home",
-    "joker": "Erstelle Joker"
+    "joker": "Joker",
+    "voucher": "Gutschein"
   },
   "page": {
     "index": {

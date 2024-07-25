@@ -14,8 +14,9 @@
   },
   "nav": {
     "home": "Home",
-    "joker": "Create Joker",
-    "consumable": "Create Consumable"
+    "joker": "Joker",
+    "consumable": "Consumable",
+    "voucher": "Voucher"
   },
   "changelog": {
     "0_2_1": {
@@ -71,6 +72,12 @@
     },
     "0_2_6": {
       "changed_0": "Share codes will now be compressed using the deflate algorithm before they get encoded with base64"
+    },
+    "0_3_0": {
+      "fixed_0": "Fixed a misspelling across localization files where the top-level \"descriptions\" was misspelled to \"description\"",
+      "fixed_1": "Fixed translations missing for card description tags (like rarities)",
+      "added_0": "Added a voucher creator",
+      "fixed_2": "Fixed missing commas after config key in code preview"
     }
   },
   "editor": {
@@ -110,6 +117,13 @@
       "blueprintCompat": "Compatible with Blueprint",
       "eternalCompat": "Compatible with Eternal",
       "perishableCompat": "Compatible with Perishable"
+    },
+    "voucher": {
+      "requires": {
+        "title": "Requires",
+        "remove": "Remove",
+        "add": "Add voucher requirement"
+      }
     }
   },
   "balatro": {
@@ -123,7 +137,8 @@
       "uncommon": "Uncommon",
       "rare": "Rare",
       "legendary": "Legendary"
-    }
+    },
+    "voucher": "Voucher"
   },
   "settings": {
     "crt": "CRT",

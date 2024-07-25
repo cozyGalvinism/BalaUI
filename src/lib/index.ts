@@ -68,6 +68,22 @@ export type ConsumableData = {
     localization: LocalizationEntry[];
 }
 
+export type VoucherData = {
+    key: string;
+    locName: string;
+    locText: string;
+    atlas: string;
+    cost: number;
+    posX: number;
+    posY: number;
+    unlocked: boolean;
+    discovered: boolean;
+    requires: string[];
+
+    previewVariables: PreviewVariable[];
+    localization: LocalizationEntry[];
+}
+
 export type PreviewVariable = {
     name: string;
     value: string;

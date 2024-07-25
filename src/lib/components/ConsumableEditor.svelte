@@ -6,7 +6,6 @@
     import LabelDropdown from "./LabelDropdown.svelte"
     import ImageDrop from "./ImageDrop.svelte"
     import CardDescription from "./CardDescription.svelte"
-    import Highlight, { LineNumbers } from "svelte-highlight"
     import lua from "svelte-highlight/languages/lua"
     import json from "svelte-highlight/languages/json"
     import Button from "./Button.svelte"
@@ -144,7 +143,7 @@ SMODS.Consumable{
 
         codePreview += `,\n    pos = { x = ${consumablePosX}, y = ${consumablePosY} }`
 
-        codePreview += `,\n    config = { extra = {${consumablePreviewVariables.map((variable) => `${variable.name} = '${variable.value}'`)}} }`
+        codePreview += `,\n    config = { extra = {${consumablePreviewVariables.map((variable) => `${variable.name} = '${variable.value}'`).join(', ')}} }`
 
         codePreview += `,\n    loc_vars = function(self, info_queue, card)
         return { vars = {${consumablePreviewVariables.map((variable) => `card.ability.extra.${variable.name}`).join(', ')}} }
@@ -170,7 +169,7 @@ SMODS.Consumable{
             {
                 fileName: 'MyMod/localization/default.json',
                 content: JSON.stringify({
-                    description: {
+                    descriptions: {
                         [consumableSet]: {
                             [`c_mymod_${consumableKey}`]: {
                                 name: consumableLocName,
@@ -180,7 +179,23 @@ SMODS.Consumable{
                     }
                 }, null, 2),
                 lang: json
-            }
+            },
+            ...consumableLocalizationEntries.map(locEntry => {
+                return {
+                    fileName: `MyMod/localization/${locEntry.locale}.json`,
+                    content: JSON.stringify({
+                        descriptions: {
+                            [consumableSet]: {
+                                [`c_mymod_${consumableKey}`]: {
+                                    name: locEntry.name,
+                                    text: locEntry.text.split('\n')
+                                }
+                            }
+                        }
+                    }, null, 2),
+                    lang: json
+                }
+            })
         ]
     }
 
@@ -213,7 +228,7 @@ SMODS.Consumable{
                 name: `MyMod/localization/${locEntry.locale}.json`,
                 lastModified: new Date(),
                 input: JSON.stringify({
-                    description: {
+                    descriptions: {
                         [consumableSet]: {
                             [`c_mymod_${consumableKey}`]: {
                                 name: locEntry.name,
@@ -235,7 +250,7 @@ SMODS.Consumable{
                 name: 'MyMod/localization/default.json',
                 lastModified: new Date(),
                 input: JSON.stringify({
-                    description: {
+                    descriptions: {
                         [consumableSet]: {
                             [`c_mymod_${consumableKey}`]: {
                                 name: consumableLocName,
