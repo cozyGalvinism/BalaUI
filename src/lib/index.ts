@@ -1,4 +1,5 @@
 import type { LanguageType } from "svelte-highlight/languages";
+import pako from 'pako';
 
 export const localeList = [
     'de',
@@ -84,3 +85,30 @@ export function stripFormatting(text: string) {
     return text.replace(regex, '')
 }
 
+function uint8ArrayToRaw(uint8Array: Uint8Array): string {
+    return String.fromCharCode(...uint8Array);
+}
+
+function rawToUint8Array(raw: string): Uint8Array {
+    const uint8Array = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) {
+        uint8Array[i] = raw.charCodeAt(i);
+    }
+    return uint8Array;
+}
+
+export function toShareCode<T extends object>(obj: T) {
+    const jsonString = JSON.stringify(obj)
+    const compressedUint8 = pako.deflate(jsonString)
+    const code = btoa(uint8ArrayToRaw(compressedUint8))
+
+    return encodeURIComponent(code)
+}
+
+export function fromShareCode(code: string) {
+    const compressed = rawToUint8Array(atob(decodeURIComponent(code)))
+    const decompressed = pako.inflate(compressed)
+    const decompressedString = new TextDecoder().decode(decompressed);
+
+    return JSON.parse(decompressedString)
+}

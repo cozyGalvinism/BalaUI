@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation"
-    import { localeList, type CodeFile, type ConsumableData, type Option } from "$lib"
+    import { localeList, toShareCode, type CodeFile, type ConsumableData, type Option } from "$lib"
     import atomOneDark from "svelte-highlight/styles/atom-one-dark"
     import LabelField from "./LabelField.svelte"
     import LabelDropdown from "./LabelDropdown.svelte"
@@ -40,7 +40,7 @@
     let code = ''
 
     function updateShareCode() {
-        const newCode = btoa(JSON.stringify({
+        const newCode = toShareCode({
             key: consumableKey,
             set: consumableSet,
             locName: consumableLocName,
@@ -57,7 +57,7 @@
             canRepeatSoul: consumableCanRepeatSoul,
             previewVariables: consumablePreviewVariables,
             localization: consumableLocalizationEntries,
-        } as ConsumableData))
+        })
 
         if (newCode !== code) {
             code = newCode

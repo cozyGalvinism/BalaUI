@@ -15,6 +15,13 @@
 
     let changelog: ChangelogEntry[] = [
         {
+            version: '0.2.6',
+            date: '2024-07-24',
+            changed: [
+                $_('changelog.0_2_6.changed_0'),
+            ]
+        },
+        {
             version: '0.2.5',
             date: '2024-07-24',
             added: [

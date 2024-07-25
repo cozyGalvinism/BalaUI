@@ -63,6 +63,9 @@
     "0_2_5": {
       "added_0": "Tabs zur Code-Preview hinzugefügt",
       "changed_0": "Lokalisierungsdateien sind nun im JSON-Format statt in Lua"
+    },
+    "0_2_6": {
+      "changed_0": "Daten innerhalb des Share-Codes werden nun mit dem Deflate-Algorithmus komprimiert bevor sie in Base64 kodiert werden"
     }
   },
   "editor": {

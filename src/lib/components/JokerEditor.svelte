@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Highlight, { LineNumbers } from "svelte-highlight";
     import LabelField from "./LabelField.svelte"
     import atomOneDark from "svelte-highlight/styles/atom-one-dark";
     import LabelDropdown from "./LabelDropdown.svelte"
@@ -10,14 +9,10 @@
     import CardDescription from "./CardDescription.svelte"
     import Button from "./Button.svelte"
     import { downloadZip } from "client-zip"
-    import { localeList, type JokerData, type LocalizationEntry, type PreviewVariable, type Option, type CodeFile } from "$lib"
+    import { localeList, type JokerData, type LocalizationEntry, type PreviewVariable, type Option, type CodeFile, toShareCode } from "$lib"
     import { goto } from "$app/navigation"
     import Tag from "./Tag.svelte"
     import { _ } from 'svelte-i18n'
-    import TabView from "./TabView.svelte"
-    import TabHead from "./TabHead.svelte"
-    import TabHeadItem from "./TabHeadItem.svelte"
-    import TabContentItem from "./TabContentItem.svelte"
     import TabbedHighlight from "./TabbedHighlight.svelte"
     import json from "svelte-highlight/languages/json"
     import lua from "svelte-highlight/languages/lua"
@@ -26,7 +21,7 @@
     let code = '';
 
     function updateShareCode() {
-        const newCode = btoa(JSON.stringify({
+        const jokerData: JokerData = {
             key: jokerKey,
             rarity: jokerRarity,
             discovered: jokerDiscovered,
@@ -42,7 +37,8 @@
             perishableCompat: jokerPerishableCompat,
             previewVariables: jokerPreviewVariables,
             localization: jokerLocalizationEntries,
-        } as JokerData))
+        }
+        const newCode = toShareCode(jokerData)
 
         if (newCode !== code) {
             code = newCode

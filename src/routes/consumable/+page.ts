@@ -1,4 +1,4 @@
-import { stripFormatting, type ConsumableData } from '$lib';
+import { fromShareCode, stripFormatting, type ConsumableData } from '$lib';
 
 export const prerender = false;
 
@@ -7,7 +7,7 @@ export function load({ url }) {
 
     const code = url.searchParams.get('code')
     if (code !== null) {
-        consumableObj = JSON.parse(atob(decodeURIComponent(code))) as ConsumableData
+        consumableObj = fromShareCode(decodeURIComponent(code))
     }
 
     if (consumableObj === null) {

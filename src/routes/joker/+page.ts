@@ -1,4 +1,4 @@
-import { stripFormatting, type JokerData } from '$lib';
+import { fromShareCode, stripFormatting, type JokerData } from '$lib';
 
 export const prerender = false;
 
@@ -7,7 +7,7 @@ export function load({ url }) {
 
     const code = url.searchParams.get('code')
     if (code !== null) {
-        jokerObj = JSON.parse(atob(decodeURIComponent(code))) as JokerData
+        jokerObj = fromShareCode(decodeURIComponent(code))
     }
 
     if (jokerObj === null) {

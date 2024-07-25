@@ -68,6 +68,9 @@
     "0_2_5": {
       "added_0": "Added tabs to the code preview",
       "changed_0": "Changed generated localization files to use JSON instead of Lua"
+    },
+    "0_2_6": {
+      "changed_0": "Share codes will now be compressed using the deflate algorithm before they get encoded with base64"
     }
   },
   "editor": {
