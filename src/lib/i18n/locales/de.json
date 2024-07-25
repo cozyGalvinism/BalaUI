@@ -59,6 +59,10 @@
     },
     "0_2_4": {
       "added_0": "Deutsche Übersetzung hinzugefügt"
+    },
+    "0_2_5": {
+      "added_0": "Tabs zur Code-Preview hinzugefügt",
+      "changed_0": "Lokalisierungsdateien sind nun im JSON-Format statt in Lua"
     }
   },
   "editor": {

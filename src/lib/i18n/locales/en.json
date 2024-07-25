@@ -64,6 +64,10 @@
     },
     "0_2_4": {
       "added_0": "Added German translation"
+    },
+    "0_2_5": {
+      "added_0": "Added tabs to the code preview",
+      "changed_0": "Changed generated localization files to use JSON instead of Lua"
     }
   },
   "editor": {
