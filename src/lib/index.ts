@@ -84,6 +84,20 @@ export type VoucherData = {
     localization: LocalizationEntry[];
 }
 
+export type DeckData = {
+    key: string;
+    locName: string;
+    locText: string;
+    atlas: string;
+    posX: number;
+    posY: number;
+    unlocked: boolean;
+    discovered: boolean;
+    
+    previewVariables: PreviewVariable[];
+    localization: LocalizationEntry[];
+}
+
 export type PreviewVariable = {
     name: string;
     value: string;

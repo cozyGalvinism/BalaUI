@@ -16,7 +16,8 @@
     "home": "Home",
     "joker": "Joker",
     "consumable": "Consumable",
-    "voucher": "Voucher"
+    "voucher": "Voucher",
+    "deck": "Deck"
   },
   "changelog": {
     "0_2_1": {
@@ -78,6 +79,10 @@
       "fixed_1": "Fixed translations missing for card description tags (like rarities)",
       "added_0": "Added a voucher creator",
       "fixed_2": "Fixed missing commas after config key in code preview"
+    },
+    "0_4_0": {
+      "added_0": "Added a deck creator",
+      "changed_0": "Refactored component structure"
     }
   },
   "editor": {
