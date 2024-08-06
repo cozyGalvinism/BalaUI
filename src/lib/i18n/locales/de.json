@@ -73,6 +73,10 @@
       "fixed_0": "Es wurde ein Rechtschreibfehler in den Lokalisierungsdateien behoben, bei dem die oberste Ebene „descriptions“ falsch als „description“ geschrieben wurde.",
       "fixed_1": "Fehlende Übersetzungen für Kartenbeschreibungs-Tags (z. B. Seltenheit) behoben.",
       "fixed_2": "Fehlende Kommas nach dem config-Schlüssel in der Codevorschau behoben"
+    },
+    "0_4_0": {
+      "added_0": "Deck-Ersteller hinzugefügt",
+      "changed_0": "Komponentenstruktur überarbeitet"
     }
   },
   "editor": {
@@ -133,7 +137,8 @@
     "consumable": "Verbrauchsgegenstand",
     "home": "Home",
     "joker": "Joker",
-    "voucher": "Gutschein"
+    "voucher": "Gutschein",
+    "deck": "Deck"
   },
   "page": {
     "index": {

@@ -1,5 +1,5 @@
 <script>
-    import VoucherEditor from "$lib/components/VoucherEditor.svelte"
+    import { VoucherEditor } from "$lib/components"
 
     export let data
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import JumpingText from './JumpingText.svelte'
+    import { JumpingText } from "$lib/components"
 
     export let text
     export let colour

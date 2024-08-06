@@ -1,7 +1,5 @@
 <script lang="ts">
-    import BalatroBackground from '$lib/components/BalatroBackground.svelte'
-    import Nav from '$lib/components/Nav.svelte'
-    import Settings from '$lib/components/Settings.svelte'
+    import { BalatroBackground, Nav, Settings } from '$lib/components'
     import { settings } from '$lib/stores'
     import { onMount } from 'svelte'
     import '../app.css'

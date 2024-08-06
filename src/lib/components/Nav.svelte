@@ -8,6 +8,7 @@
         { href: '/joker', text: $_('nav.joker') },
         { href: '/consumable', text: $_('nav.consumable') },
         { href: '/voucher', text: $_('nav.voucher') },
+        { href: '/deck', text: $_('nav.deck') },
     ]
 </script>
 

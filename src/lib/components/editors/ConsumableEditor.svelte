@@ -2,20 +2,11 @@
     import { goto } from "$app/navigation"
     import { localeList, toShareCode, type CodeFile, type ConsumableData, type Option } from "$lib"
     import atomOneDark from "svelte-highlight/styles/atom-one-dark"
-    import LabelField from "./LabelField.svelte"
-    import LabelDropdown from "./LabelDropdown.svelte"
-    import ImageDrop from "./ImageDrop.svelte"
-    import CardDescription from "./CardDescription.svelte"
+    import { LabelField, TabbedHighlight, Button, LabelDropdown, Tag, CardDescription, ImageDrop, LabelCheckbox, LabelNumberInput, LabelTextArea } from "$lib/components"
     import lua from "svelte-highlight/languages/lua"
     import json from "svelte-highlight/languages/json"
-    import Button from "./Button.svelte"
     import { downloadZip } from "client-zip"
-    import Tag from "./Tag.svelte"
-    import LabelTextArea from "./LabelTextArea.svelte"
-    import LabelNumberInput from "./LabelNumberInput.svelte"
-    import LabelCheckbox from "./LabelCheckbox.svelte"
     import { _ } from 'svelte-i18n'
-    import TabbedHighlight from "./TabbedHighlight.svelte"
 
     export let initialConsumableData: ConsumableData | null = null;
 

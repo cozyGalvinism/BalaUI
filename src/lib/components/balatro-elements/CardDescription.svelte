@@ -1,8 +1,7 @@
 <script lang="ts">
     import { optional } from '$lib'
     import { onMount } from 'svelte'
-    import JumpingText from './JumpingText.svelte'
-    import FormattedText from './FormattedText.svelte'
+    import { JumpingText, FormattedText } from '$lib/components'
     import Tag from './Tag.svelte'
     import { text } from '@sveltejs/kit'
 

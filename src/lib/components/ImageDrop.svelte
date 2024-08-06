@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte'
     import { writable } from 'svelte/store'
-    import JumpingText from './JumpingText.svelte'
+    import { JumpingText } from '$lib/components'
     import {_} from 'svelte-i18n'
 
     export let width: number = 284

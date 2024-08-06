@@ -1,10 +1,6 @@
 <script lang="ts">
     import Highlight, { LineNumbers } from "svelte-highlight"
-    import Button from "./Button.svelte"
-    import TabContentItem from "./TabContentItem.svelte"
-    import TabHead from "./TabHead.svelte"
-    import TabHeadItem from "./TabHeadItem.svelte"
-    import TabView from "./TabView.svelte"
+    import { Button, TabContentItem, TabHeadItem, TabHead, TabView } from "$lib/components"
     import { _ } from 'svelte-i18n'
     import type { CodeFile } from "$lib"
 

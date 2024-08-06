@@ -1,16 +1,7 @@
 <script lang="ts">
     import { localeList, toShareCode, type CodeFile, type VoucherData } from "$lib"
-    import LabelField from "./LabelField.svelte"
-    import LabelNumberInput from "./LabelNumberInput.svelte"
-    import LabelCheckbox from "./LabelCheckbox.svelte"
+    import { LabelField, TabbedHighlight, Button, LabelDropdown, Tag, CardDescription, ImageDrop, LabelCheckbox, LabelNumberInput, LabelTextArea } from "$lib/components"
     import { _ } from 'svelte-i18n'
-    import LabelTextArea from "./LabelTextArea.svelte"
-    import Button from "./Button.svelte"
-    import LabelDropdown from "./LabelDropdown.svelte"
-    import ImageDrop from "./ImageDrop.svelte"
-    import CardDescription from "./CardDescription.svelte"
-    import Tag from "./Tag.svelte"
-    import TabbedHighlight from "./TabbedHighlight.svelte"
     import lua from "svelte-highlight/languages/lua"
     import json from "svelte-highlight/languages/json"
     import { downloadZip } from "client-zip"

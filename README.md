@@ -11,10 +11,10 @@ A set of modding utilities for [Balatro](https://store.steampowered.com/app/2379
   - [x] Preview localized texts
     - [x] Implement most formatting options
     - [x] Implement preview for variables
-  - [ ] Parsing jokers from code
 - [x] Creating consumables
 - [x] Creating vouchers
-- [ ] Creating decks
+- [x] Creating decks
+- [ ] Parsing jokers, consumables, vouchers and decks from Lua files
 - [ ] Creating atlases
 - [ ] Resizing images
 - [ ] Add colorblind support

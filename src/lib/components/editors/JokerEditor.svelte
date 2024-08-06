@@ -1,19 +1,10 @@
 <script lang="ts">
-    import LabelField from "./LabelField.svelte"
+    import { LabelField, TabbedHighlight, Button, LabelDropdown, Tag, CardDescription, ImageDrop, LabelCheckbox, LabelNumberInput, LabelTextArea } from "$lib/components"
     import atomOneDark from "svelte-highlight/styles/atom-one-dark";
-    import LabelDropdown from "./LabelDropdown.svelte"
-    import ImageDrop from "./ImageDrop.svelte"
-    import LabelCheckbox from "./LabelCheckbox.svelte"
-    import LabelNumberInput from "./LabelNumberInput.svelte"
-    import LabelTextArea from "./LabelTextArea.svelte"
-    import CardDescription from "./CardDescription.svelte"
-    import Button from "./Button.svelte"
     import { downloadZip } from "client-zip"
     import { localeList, type JokerData, type LocalizationEntry, type PreviewVariable, type Option, type CodeFile, toShareCode } from "$lib"
     import { goto } from "$app/navigation"
-    import Tag from "./Tag.svelte"
     import { _ } from 'svelte-i18n'
-    import TabbedHighlight from "./TabbedHighlight.svelte"
     import json from "svelte-highlight/languages/json"
     import lua from "svelte-highlight/languages/lua"
 
