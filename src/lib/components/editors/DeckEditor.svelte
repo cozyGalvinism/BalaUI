@@ -149,7 +149,7 @@ SMODS.Back{
 
             localizationFiles.push({
                 name: `MyMod/localization/${locEntry.locale}.json`,
-                content: JSON.stringify({
+                input: JSON.stringify({
                     descriptions: {
                         Back: {
                             [`b_mymod_${deckKey}`]: {
@@ -159,7 +159,7 @@ SMODS.Back{
                         }
                     }
                 }, null, 2),
-                lang: json
+                lastModified: new Date(),
             })
         }
 
