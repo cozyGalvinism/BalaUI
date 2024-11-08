@@ -16,7 +16,7 @@
 		"@sveltejs/kit": "^2.5.27",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"@types/pako": "^2.0.3",
-		"@types/three": "^0.168.0",
+		"@types/three": "^0.169.0",
 		"autoprefixer": "^10.4.19",
 		"postcss": "^8.4.39",
 		"svelte": "^5.0.0",
@@ -33,6 +33,6 @@
 		"@vercel/speed-insights": "^1.1.0",
 		"client-zip": "^2.4.5",
 		"pako": "^2.1.0",
-		"three": "^0.168.0"
+		"three": "^0.170.0"
 	}
 }
