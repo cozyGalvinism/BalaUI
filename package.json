@@ -29,7 +29,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@vercel/speed-insights": "^1.0.12",
+		"@vercel/speed-insights": "^1.1.0",
 		"client-zip": "^2.4.5",
 		"pako": "^2.1.0",
 		"three": "^0.168.0"
