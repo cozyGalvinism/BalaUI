@@ -1,11 +1,24 @@
 <script lang="ts">
-    export let id: number
-    export let buttonClass = ''
-    export let liClass = 'mr-2'
+    interface Props {
+        id: number;
+        buttonClass?: string;
+        liClass?: string;
+        children?: import('svelte').Snippet;
+
+        onClick?: () => void;
+    }
+
+    let {
+        id,
+        buttonClass = '',
+        liClass = 'mr-2',
+        children,
+        onClick
+    }: Props = $props();
 </script>
 
 <li class="{liClass}" role="presentation">
-    <button class="{buttonClass}" on:click id="{id}-tabhead" type="button" role="tab">
-        <slot />
+    <button class="{buttonClass}" onclick={onClick} id="{id}-tabhead" type="button" role="tab">
+        {@render children?.()}
     </button>
 </li>

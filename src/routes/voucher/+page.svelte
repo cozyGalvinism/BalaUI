@@ -1,6 +1,6 @@
 <script>
     import { VoucherEditor } from "$lib/components"
 
-    export let data
+    let { data } = $props();
 </script>
 <VoucherEditor initialVoucherData={data.voucherData} />

@@ -1,7 +1,11 @@
 <script lang="ts">
     import { onMount } from 'svelte'
 
-    export let text = ''
+    interface Props {
+        text?: string;
+    }
+
+    let { text = '' }: Props = $props();
 
     interface FormatOptions {
         color?: string
@@ -152,8 +156,8 @@
         return parts
     }
 
-    let parsedText: TextPart[]
-    $: parsedText = parseText(text)
+    let parsedText: TextPart[] = $derived(parseText(text))
+    
 
     function renderContent(content: string) {
         if (!content) return ''

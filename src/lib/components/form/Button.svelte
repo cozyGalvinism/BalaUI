@@ -1,18 +1,31 @@
 <script lang="ts">
 
-    export let name: string
-    export let color: string
-    export let hoverColor: string
-    export let activeColor: string
-    export let action: () => void
 
-    let className: string = ''
+    interface Props {
+        name: string;
+        color: string;
+        hoverColor: string;
+        activeColor: string;
+        action: () => void;
+        class?: string;
+        children?: import('svelte').Snippet;
+    }
 
-    export { className as class }
+    let {
+        name,
+        color,
+        hoverColor,
+        activeColor,
+        action,
+        class: className = '',
+        children
+    }: Props = $props();
+
+    
 </script>
 
-<button class="colorable-button {className}" style="--btn-color: {color}; --btn-hover-color: {hoverColor}; --btn-active-color: {activeColor};" name={name} on:click={action}>
-    <slot />
+<button class="colorable-button {className}" style="--btn-color: {color}; --btn-hover-color: {hoverColor}; --btn-active-color: {activeColor};" name={name} onclick={action}>
+    {@render children?.()}
 </button>
 
 <style lang="postcss">

@@ -5,8 +5,13 @@
     import Tag from './Tag.svelte'
     import { text } from '@sveltejs/kit'
 
-    export let name: string
-    export let description: string
+    interface Props {
+        name: string;
+        description: string;
+        children?: import('svelte').Snippet;
+    }
+
+    let { name, description, children }: Props = $props();
 </script>
 
 <div
@@ -26,7 +31,7 @@
     </div>
 
     <div class="flex justify-center">
-        <slot />
+        {@render children?.()}
     </div>
 </div>
 

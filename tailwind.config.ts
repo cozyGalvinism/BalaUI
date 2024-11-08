@@ -1,4 +1,5 @@
-/** @type {import('tailwindcss').Config} */
+import { Config } from "tailwindcss";
+
 export default {
   content: [
     './src/**/*.{html,js,svelte,ts}',
@@ -30,5 +31,5 @@ export default {
     },
   },
   plugins: [],
-}
+} satisfies Config;
 

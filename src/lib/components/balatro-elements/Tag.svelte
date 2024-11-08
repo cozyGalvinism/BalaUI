@@ -1,9 +1,13 @@
 <script lang="ts">
     import { JumpingText } from "$lib/components"
 
-    export let text
-    export let colour
-    export let shadowColour;
+    interface Props {
+        text: string;
+        colour: string;
+        shadowColour: string;
+    }
+
+    let { text, colour, shadowColour }: Props = $props();
 </script>
 
 <div
