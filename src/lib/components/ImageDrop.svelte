@@ -4,12 +4,16 @@
     import { JumpingText } from '$lib/components'
     import {_} from 'svelte-i18n'
 
-    export let width: number = 284
-    export let height: number = 380
+    interface Props {
+        width?: number;
+        height?: number;
+    }
 
-    let image: string | null = null
+    let { width = 284, height = 380 }: Props = $props();
+
+    let image: string | null = $state(null)
     let imageFile: File | null = null
-    let fileInput: HTMLInputElement | null = null
+    let fileInput: HTMLInputElement | null = $state(null)
     const imageSrc = writable<string | null>(null)
 
     function handleImageDrop(event: DragEvent) {
@@ -68,24 +72,24 @@
         aria-dropeffect="copy"
         tabindex="0"
         style="--image-drop-width: {width}px; --image-drop-height: {height}px;"
-        aria-label="{$_('imageDrop.ariaLabel')}"
-        on:drop={handleImageDrop}
-        on:dragover={(event) => event.preventDefault()}
-        on:dragleave={(event) => event.preventDefault()}
-        on:click={() => fileInput?.click()}
+        aria-label={$_('imageDrop.ariaLabel')}
+        ondrop={handleImageDrop}
+        ondragover={(event) => event.preventDefault()}
+        ondragleave={(event) => event.preventDefault()}
+        onclick={() => fileInput?.click()}
     >
         {#if image}
             <img src={$imageSrc} alt="{$_('imageDrop.alt')}" class="h-full preview" />
         {:else}
             <div class="text-center flex items-center h-full">
-                <JumpingText className="text-xl" text="{$_('imageDrop.text')}" />
+                <JumpingText className="text-xl" text={$_('imageDrop.text')} />
             </div>
         {/if}
     </button>
     <input
         type="file"
         class="hidden"
-        on:change={handleImageSelection}
+        onchange={handleImageSelection}
         accept="image/*"
         bind:this={fileInput}
     />

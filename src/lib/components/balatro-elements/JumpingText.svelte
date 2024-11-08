@@ -1,6 +1,10 @@
-<script>
-    export let text = ''
-    export let className = ''
+<script lang="ts">
+    interface Props {
+        text?: string;
+        className?: string;
+    }
+
+    let { text = '', className = '' }: Props = $props();
 </script>
 
 <div class="{className}">

@@ -1,11 +1,20 @@
 <script lang="ts">
-    export let divClass = ''
-    export let ulClass = 'flex flex-wrap -mb-px gap-2'
+    import type { Snippet } from "svelte"
+
+    interface Props {
+        divClass?: string;
+        ulClass?: string;
+
+        children?: Snippet;
+        afterTabList?: Snippet;
+    };
+
+    let { divClass = '', ulClass = 'flex flex-wrap -mb-px gap-2', children, afterTabList }: Props = $props();
 </script>
 
 <div class="{divClass}">
     <ul class="{ulClass}" role="tablist">
-        <slot />
+        {@render children?.()}
     </ul>
-    <slot name="after-tablist" />
+    {@render afterTabList?.()}
 </div>

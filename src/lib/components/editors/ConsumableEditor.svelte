@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
+
     import { goto } from "$app/navigation"
     import { localeList, toShareCode, type CodeFile, type ConsumableData, type Option } from "$lib"
     import atomOneDark from "svelte-highlight/styles/atom-one-dark"
@@ -8,24 +10,28 @@
     import { downloadZip } from "client-zip"
     import { _ } from 'svelte-i18n'
 
-    export let initialConsumableData: ConsumableData | null = null;
+    interface Props {
+        initialConsumableData?: ConsumableData | null;
+    }
 
-    let consumableKey = initialConsumableData?.key ?? 'replace_me'
-    let consumableSet = initialConsumableData?.set ?? 'Tarot'
-    let consumableLocName = initialConsumableData?.locName ?? 'The Hermit'
-    let consumableLocText = initialConsumableData?.locText ?? 'Doubles money\n{C:inactive}(Max of {C:money}$20{C:inactive})'
-    let consumableCost = initialConsumableData?.cost ?? 0
-    let consumablePosX = initialConsumableData?.posX ?? 0
-    let consumablePosY = initialConsumableData?.posY ?? 0
-    let consumableAtlas = initialConsumableData?.atlas ?? ''
-    let consumableUnlocked = initialConsumableData?.unlocked ?? true
-    let consumableDiscovered = initialConsumableData?.discovered ?? false
-    let consumableHidden = initialConsumableData?.hidden ?? false
-    let consumableSoulSet = initialConsumableData?.soulSet ?? 'Spectral'
-    let consumableSoulRate = initialConsumableData?.soulRate ?? 0.003
-    let consumableCanRepeatSoul = initialConsumableData?.canRepeatSoul ?? false
-    let consumablePreviewVariables = initialConsumableData?.previewVariables ?? []
-    let consumableLocalizationEntries = initialConsumableData?.localization ?? []
+    let { initialConsumableData = null }: Props = $props();
+
+    let consumableKey = $state(initialConsumableData?.key ?? 'replace_me')
+    let consumableSet = $state(initialConsumableData?.set ?? 'Tarot')
+    let consumableLocName = $state(initialConsumableData?.locName ?? 'The Hermit')
+    let consumableLocText = $state(initialConsumableData?.locText ?? 'Doubles money\n{C:inactive}(Max of {C:money}$20{C:inactive})')
+    let consumableCost = $state(initialConsumableData?.cost ?? 0)
+    let consumablePosX = $state(initialConsumableData?.posX ?? 0)
+    let consumablePosY = $state(initialConsumableData?.posY ?? 0)
+    let consumableAtlas = $state(initialConsumableData?.atlas ?? '')
+    let consumableUnlocked = $state(initialConsumableData?.unlocked ?? true)
+    let consumableDiscovered = $state(initialConsumableData?.discovered ?? false)
+    let consumableHidden = $state(initialConsumableData?.hidden ?? false)
+    let consumableSoulSet = $state(initialConsumableData?.soulSet ?? 'Spectral')
+    let consumableSoulRate = $state(initialConsumableData?.soulRate ?? 0.003)
+    let consumableCanRepeatSoul = $state(initialConsumableData?.canRepeatSoul ?? false)
+    let consumablePreviewVariables = $state(initialConsumableData?.previewVariables ?? [])
+    let consumableLocalizationEntries = $state(initialConsumableData?.localization ?? [])
 
     let code = ''
 
@@ -71,21 +77,20 @@
         }
     ]
 
-    let activeTabValue: number
+    let activeTabValue: number = $state(0)
 
-    let resolvedLocText = '';
-    $: {
-        resolvedLocText = consumableLocText;
+    let resolvedLocText = $derived.by(() => {
+        let resolvedLocText = consumableLocText;
 
         consumablePreviewVariables.forEach((variable, index) => {
             resolvedLocText = resolvedLocText.replace(new RegExp(`#${index + 1}#`, 'g'), variable.value);
         });
-    }
 
-    let codePreview = ''
-    let previewFiles: CodeFile[] = []
-    $: {
-        codePreview = `--- STEAMODDED HEADER
+        return resolvedLocText;
+    });
+
+    let codePreview = $derived.by(() => {
+        let codePreview = `--- STEAMODDED HEADER
 --- MOD_NAME: MyMod
 --- MOD_ID: MyMod
 --- MOD_AUTHOR: [Your Name]
@@ -149,9 +154,12 @@ SMODS.Consumable{
         codePreview = codePreview + `
 
 ----------------------------------------------
-------------MOD CODE END----------------------`
+------------MOD CODE END----------------------`;
 
-        previewFiles = [
+        return codePreview;
+    });
+    let previewFiles: CodeFile[] = $derived.by(() => {
+        let previewFiles = [
             {
                 fileName: 'MyMod/MyMod.lua',
                 content: codePreview,
@@ -187,8 +195,10 @@ SMODS.Consumable{
                     lang: json
                 }
             })
-        ]
-    }
+        ];
+
+        return previewFiles;
+    })
 
     function addVariable() {
         consumablePreviewVariables = [...consumablePreviewVariables, {name: '', value: ''}]
@@ -272,25 +282,25 @@ SMODS.Consumable{
 
 <div class="flex flex-row gap-2">
     <div class="text-2xl flex-1 flex flex-col gap-1">
-        <LabelField name="consumableKey" label="{$_('editor.key')}" bind:value={consumableKey} on:input={updateShareCode} />
-        <LabelField name="consumableName" label="{$_('editor.name')}" bind:value={consumableLocName} on:input={updateShareCode} />
-        <LabelTextArea name="consumableLocText" label='{$_('editor.description')}' bind:value={consumableLocText} on:input={updateShareCode} />
-        <LabelDropdown name="consumableSet" label="{$_('editor.consumable.set')}" bind:value={consumableSet} on:change={updateShareCode} options={consumableSets} />
-        <LabelField name="consumableAtlas" label="{$_('editor.atlas')}" bind:value={consumableAtlas} on:input={updateShareCode} />
-        <LabelNumberInput name="consumableCost" label="{$_('editor.cost')}" bind:value={consumableCost} on:input={updateShareCode} />
+        <LabelField name="consumableKey" label={$_('editor.key')} bind:value={consumableKey} onInput={updateShareCode} />
+        <LabelField name="consumableName" label={$_('editor.name')} bind:value={consumableLocName} onInput={updateShareCode} />
+        <LabelTextArea name="consumableLocText" label={$_('editor.description')} bind:value={consumableLocText} onInput={updateShareCode} />
+        <LabelDropdown name="consumableSet" label={$_('editor.consumable.set')} bind:value={consumableSet} onChange={updateShareCode} options={consumableSets} />
+        <LabelField name="consumableAtlas" label={$_('editor.atlas')} bind:value={consumableAtlas} onInput={updateShareCode} />
+        <LabelNumberInput name="consumableCost" label={$_('editor.cost')} bind:value={consumableCost} onInput={updateShareCode} />
         <div class="flex flex-row gap-4">
-            <LabelNumberInput name="consumablePosX" label="{$_('editor.atlasX')}" bind:value={consumablePosX} on:input={updateShareCode} />
-            <LabelNumberInput name="consumablePosY" label="{$_('editor.atlasY')}" bind:value={consumablePosY} on:input={updateShareCode} />
+            <LabelNumberInput name="consumablePosX" label={$_('editor.atlasX')} bind:value={consumablePosX} onInput={updateShareCode} />
+            <LabelNumberInput name="consumablePosY" label={$_('editor.atlasY')} bind:value={consumablePosY} onInput={updateShareCode} />
         </div>
-        <LabelCheckbox name='consumableDiscovered' label='{$_('editor.discovered')}' bind:value={consumableDiscovered} on:change={updateShareCode} />
-        <LabelCheckbox name='consumableUnlocked' label='{$_('editor.unlocked')}' bind:value={consumableUnlocked} on:change={updateShareCode} />
-        <LabelCheckbox name='consumableHidden' label='{$_('editor.consumable.hidden')}' bind:value={consumableHidden} on:change={updateShareCode} />
+        <LabelCheckbox name='consumableDiscovered' label={$_('editor.discovered')} bind:value={consumableDiscovered} onChange={updateShareCode} />
+        <LabelCheckbox name='consumableUnlocked' label={$_('editor.unlocked')} bind:value={consumableUnlocked} onChange={updateShareCode} />
+        <LabelCheckbox name='consumableHidden' label={$_('editor.consumable.hidden')} bind:value={consumableHidden} onChange={updateShareCode} />
 
         {#if consumableHidden}
             <p class="mt-2 text-3xl">{$_('editor.consumable.hiddenSettingsTitle')}</p>
-            <LabelDropdown name="consumableSoulSet" label="{$_('editor.consumable.soulSet')}" bind:value={consumableSoulSet} on:input={updateShareCode} options={consumableSets} />
-            <LabelNumberInput name="consumableSoulRate" label="{$_('editor.consumable.soulRate')}" max={1.0} step={0.001} bind:value={consumableSoulRate} on:input={updateShareCode} />
-            <LabelCheckbox name="consumableCanRepeatSoul" label="{$_('editor.consumable.canRepeat')}" bind:value={consumableCanRepeatSoul} on:change={updateShareCode} />
+            <LabelDropdown name="consumableSoulSet" label={$_('editor.consumable.soulSet')} bind:value={consumableSoulSet} onChange={updateShareCode} options={consumableSets} />
+            <LabelNumberInput name="consumableSoulRate" label={$_('editor.consumable.soulRate')} max={1.0} step={0.001} bind:value={consumableSoulRate} onInput={updateShareCode} />
+            <LabelCheckbox name="consumableCanRepeatSoul" label={$_('editor.consumable.canRepeat')} bind:value={consumableCanRepeatSoul} onChange={updateShareCode} />
         {/if}
 
         <p class="mt-2 text-3xl">{$_('editor.localization.title')}</p>
@@ -298,15 +308,15 @@ SMODS.Consumable{
         <div class="flex flex-col gap-2">
             {#each consumableLocalizationEntries as entry, i}
                 <div class="flex flex-col gap-2">
-                    <LabelDropdown name="consumableLocalizationEntry_{i}_locale" label="{$_('editor.localization.locale')}" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} on:change={() => {
+                    <LabelDropdown name="consumableLocalizationEntry_{i}_locale" label={$_('editor.localization.locale')} bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} onChange={() => {
                         consumableLocalizationEntries = consumableLocalizationEntries
                         updateShareCode()
                     }} />
-                    <LabelField name="consumableLocalizationEntry_{i}_name" label="{$_('editor.name')}" on:input={() => {
+                    <LabelField name="consumableLocalizationEntry_{i}_name" label={$_('editor.name')} onInput={() => {
                         consumableLocalizationEntries = consumableLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.name} />
-                    <LabelTextArea name="consumableLocalizationEntry_{i}_text" label="{$_('editor.description')}" on:input={() => {
+                    <LabelTextArea name="consumableLocalizationEntry_{i}_text" label={$_('editor.description')} onInput={() => {
                         consumableLocalizationEntries = consumableLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.text} />
@@ -327,17 +337,19 @@ SMODS.Consumable{
         <div class="flex flex-col gap-2">
             {#each consumablePreviewVariables as variable, i}
                 <div class="flex flex-row gap-4">
-                    <LabelField name="consumableVariable_{i}_name" label="{$_('editor.name')}" on:input={() => {
+                    <LabelField name="consumableVariable_{i}_name" label={$_('editor.name')} onInput={() => {
                         consumablePreviewVariables = consumablePreviewVariables
                         updateShareCode()
                     }} bind:value={variable.name} />
-                    <LabelField name="consumableVariable_{i}" label="{$_('editor.value')}" on:input={() => {
+                    <LabelField name="consumableVariable_{i}" label={$_('editor.value')} onInput={() => {
                         consumablePreviewVariables = consumablePreviewVariables
                         updateShareCode()
                     }} bind:value={variable.value}>
-                        <Button slot="after-input" class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
+                        {#snippet afterInput()}
+                        <Button class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
                             {$_('editor.variables.remove')}
                         </Button>
+                        {/snippet}
                     </LabelField>
                 </div>
             {/each}
@@ -353,11 +365,11 @@ SMODS.Consumable{
 
             <CardDescription name={consumableLocName} description={resolvedLocText}>
                 {#if consumableSet === 'Tarot'}
-                    <Tag text="{$_('balatro.cardTypes.tarot')}" colour="#a782d1" shadowColour="#8668a7" />
+                    <Tag text={$_('balatro.cardTypes.tarot')} colour="#a782d1" shadowColour="#8668a7" />
                 {:else if consumableSet === 'Planet'}
-                    <Tag text="{$_('balatro.cardTypes.planet')}" colour="#13afce" shadowColour="#0f8ca5" />
+                    <Tag text={$_('balatro.cardTypes.planet')} colour="#13afce" shadowColour="#0f8ca5" />
                 {:else if consumableSet === 'Spectral'}
-                    <Tag text="{$_('balatro.cardTypes.spectral')}" colour="#4584fa" shadowColour="#376ac8" />
+                    <Tag text={$_('balatro.cardTypes.spectral')} colour="#4584fa" shadowColour="#376ac8" />
                 {/if}
             </CardDescription>
         </div>

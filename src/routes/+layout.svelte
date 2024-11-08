@@ -7,6 +7,11 @@
     import { page } from '$app/stores'
     import {_} from 'svelte-i18n'
     import { injectSpeedInsights } from '@vercel/speed-insights'
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
+
+    let { children }: Props = $props();
 
     injectSpeedInsights()
 
@@ -47,7 +52,7 @@
     </header>
 
     <main class="m6x11plus pt-2">
-        <slot />
+        {@render children?.()}
     </main>
 
     <footer class="m6x11plus mt-4">

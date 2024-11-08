@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
+
     import { LabelField, TabbedHighlight, Button, LabelDropdown, Tag, CardDescription, ImageDrop, LabelCheckbox, LabelNumberInput, LabelTextArea } from "$lib/components"
     import atomOneDark from "svelte-highlight/styles/atom-one-dark";
     import { downloadZip } from "client-zip"
@@ -8,7 +10,11 @@
     import json from "svelte-highlight/languages/json"
     import lua from "svelte-highlight/languages/lua"
 
-    export let initialJokerData: JokerData | null = null;
+    interface Props {
+        initialJokerData?: JokerData | null;
+    }
+
+    let { initialJokerData = null }: Props = $props();
     let code = '';
 
     function updateShareCode() {
@@ -45,33 +51,33 @@
         { value: 4, label: $_('balatro.rarities.legendary') },
     ]
 
-    let jokerKey = initialJokerData?.key || 'replace_me';
-    let jokerRarity = initialJokerData?.rarity || 1;
-    let jokerDiscovered = initialJokerData?.discovered || false;
-    let jokerUnlocked = initialJokerData?.unlocked || true;
-    let jokerAtlas = initialJokerData?.atlas || '';
-    let jokerPosX = initialJokerData?.posX || 0;
-    let jokerPosY = initialJokerData?.posY || 0;
-    let jokerLocName = initialJokerData?.locName || 'Placeholder Joker';
-    let jokerLocText = initialJokerData?.locText || '{C:mult}+4{} Mult';
-    let jokerCost = initialJokerData?.cost || 0;
-    let jokerBlueprintCompat = initialJokerData?.blueprintCompat || false;
-    let jokerEternalCompat = initialJokerData?.eternalCompat || true;
-    let jokerPerishableCompat = initialJokerData?.perishableCompat || true;
+    let jokerKey = $state(initialJokerData?.key || 'replace_me');
+    let jokerRarity = $state(initialJokerData?.rarity || 1);
+    let jokerDiscovered = $state(initialJokerData?.discovered || false);
+    let jokerUnlocked = $state(initialJokerData?.unlocked || true);
+    let jokerAtlas = $state(initialJokerData?.atlas || '');
+    let jokerPosX = $state(initialJokerData?.posX || 0);
+    let jokerPosY = $state(initialJokerData?.posY || 0);
+    let jokerLocName = $state(initialJokerData?.locName || 'Placeholder Joker');
+    let jokerLocText = $state(initialJokerData?.locText || '{C:mult}+4{} Mult');
+    let jokerCost = $state(initialJokerData?.cost || 0);
+    let jokerBlueprintCompat = $state(initialJokerData?.blueprintCompat || false);
+    let jokerEternalCompat = $state(initialJokerData?.eternalCompat || true);
+    let jokerPerishableCompat = $state(initialJokerData?.perishableCompat || true);
 
-    let jokerPreviewVariables: PreviewVariable[] = initialJokerData?.previewVariables || [];
-    let jokerLocalizationEntries: LocalizationEntry[] = initialJokerData?.localization || [];
+    let jokerPreviewVariables: PreviewVariable[] = $state(initialJokerData?.previewVariables || []);
+    let jokerLocalizationEntries: LocalizationEntry[] = $state(initialJokerData?.localization || []);
 
-    let activeTabValue: number
+    let activeTabValue: number = $state(0)
 
-    let resolvedLocText = '';
-    $: {
-        resolvedLocText = jokerLocText;
-
+    let resolvedLocText = $derived.by(() => {
+        let tmp = jokerLocText;
         jokerPreviewVariables.forEach((variable, index) => {
-            resolvedLocText = resolvedLocText.replace(new RegExp(`#${index + 1}#`, 'g'), variable.value);
+            tmp = tmp.replace(new RegExp(`#${index + 1}#`, 'g'), variable.value);
         });
-    }
+
+        return tmp;
+    });
 
     async function downloadModZip() {
         const splitText = jokerLocText.split('\n')
@@ -127,11 +133,8 @@
         link.remove();
     }
 
-    let codePreview = ''
-    let previewFiles: CodeFile[] = []
-
-    $: {
-        codePreview = `--- STEAMODDED HEADER
+    let codePreview = $derived.by(() => {
+        let code = `--- STEAMODDED HEADER
 --- MOD_NAME: MyMod
 --- MOD_ID: MyMod
 --- MOD_AUTHOR: [Your Name]
@@ -143,57 +146,61 @@
 
 SMODS.Joker{
     key = '${jokerKey}'`
-
+        
         if (jokerRarity) {
-            codePreview += `,\n    rarity = ${jokerRarity}`
+            code += `,\n    rarity = ${jokerRarity}`
         }
 
         if (jokerDiscovered) {
-            codePreview += `,\n    discovered = true`
+            code += `,\n    discovered = true`
         }
 
         if (!jokerUnlocked) {
-            codePreview += `,\n    unlocked = false`
+            code += `,\n    unlocked = false`
         }
 
         if (jokerAtlas) {
-            codePreview += `,\n    atlas = '${jokerAtlas}'`
+            code += `,\n    atlas = '${jokerAtlas}'`
         }
 
         if (jokerCost) {
-            codePreview += `,\n    cost = ${jokerCost}`
+            code += `,\n    cost = ${jokerCost}`
         }
 
         if (jokerBlueprintCompat) {
-            codePreview += `,\n    blueprint_compat = true`
+            code += `,\n    blueprint_compat = true`
         }
 
         if (!jokerEternalCompat) {
-            codePreview += `,\n    eternal_compat = false`
+            code += `,\n    eternal_compat = false`
         }
 
         if (!jokerPerishableCompat) {
-            codePreview += `,\n    perishable_compat = false`
+            code += `,\n    perishable_compat = false`
         }
 
-        codePreview += `,\n    pos = { x = ${jokerPosX}, y = ${jokerPosY} }`
+        code += `,\n    pos = { x = ${jokerPosX}, y = ${jokerPosY} }`
 
-        codePreview += `,\n    config = { extra = {${jokerPreviewVariables.map((variable) => `${variable.name} = '${variable.value}'`).join(', ')}} }`
+        code += `,\n    config = { extra = {${jokerPreviewVariables.map((variable) => `${variable.name} = '${variable.value}'`).join(', ')}} }`
 
-        codePreview += `,\n    loc_vars = function(self, info_queue, card)
+        code += `,\n    loc_vars = function(self, info_queue, card)
         return { vars = {${jokerPreviewVariables.map((variable) => `card.ability.extra.${variable.name}`).join(', ')}} }
     end`
 
-        codePreview += `,\n    calculate = function(self, card, context)\n    end`
+        code += `,\n    calculate = function(self, card, context)\n    end`
 
-        codePreview = codePreview.trimEnd().replace(/,\s*$/, '') + '\n}'
+        code = code.trimEnd().replace(/,\s*$/, '') + '\n}'
 
-        codePreview = codePreview + `
+        code = code + `
 
 ----------------------------------------------
 ------------MOD CODE END----------------------`
 
-        previewFiles = [
+        return code;
+    });
+    
+    let previewFiles: CodeFile[] = $derived.by(() => {
+        let files = [
             {
                 fileName: 'MyMod/MyMod.lua',
                 content: codePreview,
@@ -229,8 +236,10 @@ SMODS.Joker{
                     lang: json
                 }
             })
-        ]
-    }
+        ];
+
+        return files;
+    });
 
     function copyCode() {
         navigator.clipboard.writeText(codePreview)
@@ -268,36 +277,36 @@ SMODS.Joker{
 
 <div class="m6x11plus flex flex-row gap-2">
     <div class="text-2xl flex-1 flex flex-col gap-1">
-        <LabelField name='jokerKey' label='{$_('editor.key')}' bind:value={jokerKey} on:input={updateShareCode} />
-        <LabelField name='jokerLocName' label='{$_('editor.name')}' bind:value={jokerLocName} on:input={updateShareCode} />
-        <LabelTextArea name='jokerLocText' label='{$_('editor.description')}' bind:value={jokerLocText} on:input={updateShareCode} />
-        <LabelDropdown name='jokerRarity' label='{$_('editor.joker.rarity')}' on:change={updateShareCode} bind:value={jokerRarity} options={jokerRarities} />
-        <LabelField name='jokerAtlas' label='{$_('editor.atlas')}' bind:value={jokerAtlas} on:input={updateShareCode} />
-        <LabelNumberInput name='jokerCost' label='{$_('editor.cost')}' bind:value={jokerCost} on:input={updateShareCode} />
+        <LabelField name='jokerKey' label={$_('editor.key')} bind:value={jokerKey} onInput={updateShareCode} />
+        <LabelField name='jokerLocName' label={$_('editor.name')} bind:value={jokerLocName} onInput={updateShareCode} />
+        <LabelTextArea name='jokerLocText' label={$_('editor.description')} bind:value={jokerLocText} onInput={updateShareCode} />
+        <LabelDropdown name='jokerRarity' label={$_('editor.joker.rarity')} onChange={updateShareCode} bind:value={jokerRarity} options={jokerRarities} />
+        <LabelField name='jokerAtlas' label={$_('editor.atlas')} bind:value={jokerAtlas} onInput={updateShareCode} />
+        <LabelNumberInput name='jokerCost' label={$_('editor.cost')} bind:value={jokerCost} onInput={updateShareCode} />
         <div class="flex flex-row gap-4">
-            <LabelNumberInput name='jokerPosX' label='{$_('editor.atlasX')}' bind:value={jokerPosX} on:input={updateShareCode} />
-            <LabelNumberInput name='jokerPosY' label='{$_('editor.atlasY')}' bind:value={jokerPosY} on:input={updateShareCode} />
+            <LabelNumberInput name='jokerPosX' label={$_('editor.atlasX')} bind:value={jokerPosX} onInput={updateShareCode} />
+            <LabelNumberInput name='jokerPosY' label={$_('editor.atlasY')} bind:value={jokerPosY} onInput={updateShareCode} />
         </div>
-        <LabelCheckbox name='jokerDiscovered' label='{$_('editor.discovered')}' bind:value={jokerDiscovered} on:change={updateShareCode} />
-        <LabelCheckbox name='jokerUnlocked' label='{$_('editor.unlocked')}' bind:value={jokerUnlocked} on:change={updateShareCode} />
-        <LabelCheckbox name='jokerBlueprintCompat' label='{$_('editor.joker.blueprintCompat')}' bind:value={jokerBlueprintCompat} on:change={updateShareCode} />
-        <LabelCheckbox name='jokerEternalCompat' label='{$_('editor.joker.eternalCompat')}' bind:value={jokerEternalCompat} on:change={updateShareCode} />
-        <LabelCheckbox name='jokerPerishableCompat' label='{$_('editor.joker.perishableCompat')}' bind:value={jokerPerishableCompat} on:change={updateShareCode} />
+        <LabelCheckbox name='jokerDiscovered' label={$_('editor.discovered')} bind:value={jokerDiscovered} onChange={updateShareCode} />
+        <LabelCheckbox name='jokerUnlocked' label={$_('editor.unlocked')} bind:value={jokerUnlocked} onChange={updateShareCode} />
+        <LabelCheckbox name='jokerBlueprintCompat' label={$_('editor.joker.blueprintCompat')} bind:value={jokerBlueprintCompat} onChange={updateShareCode} />
+        <LabelCheckbox name='jokerEternalCompat' label={$_('editor.joker.eternalCompat')} bind:value={jokerEternalCompat} onChange={updateShareCode} />
+        <LabelCheckbox name='jokerPerishableCompat' label={$_('editor.joker.perishableCompat')} bind:value={jokerPerishableCompat} onChange={updateShareCode} />
 
         <p class="mt-2 text-3xl">{$_('editor.localization.title')}</p>
 
         <div class="flex flex-col gap-2">
             {#each jokerLocalizationEntries as entry, i}
                 <div class="flex flex-col gap-2">
-                    <LabelDropdown name="jokerLocalizationEntry_{i}_locale" label="{$_('editor.localization.locale')}" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} on:change={() => {
+                    <LabelDropdown name="jokerLocalizationEntry_{i}_locale" label={$_('editor.localization.locale')} bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} onChange={() => {
                         jokerLocalizationEntries = jokerLocalizationEntries
                         updateShareCode()
                     }} />
-                    <LabelField name="jokerLocalizationEntry_{i}_name" label="{$_('editor.name')}" on:input={() => {
+                    <LabelField name="jokerLocalizationEntry_{i}_name" label={$_('editor.name')} onInput={() => {
                         jokerLocalizationEntries = jokerLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.name} />
-                    <LabelTextArea name="jokerLocalizationEntry_{i}_text" label="{$_('editor.description')}" on:input={() => {
+                    <LabelTextArea name="jokerLocalizationEntry_{i}_text" label={$_('editor.description')} onInput={() => {
                         jokerLocalizationEntries = jokerLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.text} />
@@ -318,17 +327,19 @@ SMODS.Joker{
         <div class="flex flex-col gap-2">
             {#each jokerPreviewVariables as variable, i}
                 <div class="flex flex-row gap-4">
-                    <LabelField name="jokerVariable_{i}_name" label="{$_('editor.name')}" on:input={() => {
+                    <LabelField name="jokerVariable_{i}_name" label={$_('editor.name')} onInput={() => {
                         jokerPreviewVariables = jokerPreviewVariables
                         updateShareCode()
                     }} bind:value={variable.name} />
-                    <LabelField name="jokerVariable_{i}" label="{$_('editor.value')}" on:input={() => {
+                    <LabelField name="jokerVariable_{i}" label={$_('editor.value')} onInput={() => {
                         jokerPreviewVariables = jokerPreviewVariables
                         updateShareCode()
                     }} bind:value={variable.value}>
-                        <Button slot="after-input" class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
+                        {#snippet afterInput()}
+                        <Button class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
                             {$_('editor.variables.remove')}
                         </Button>
+                        {/snippet}
                     </LabelField>
                 </div>
             {/each}
@@ -344,13 +355,13 @@ SMODS.Joker{
 
             <CardDescription name={jokerLocName} description={resolvedLocText}>
                 {#if jokerRarity == 1}
-                    <Tag text="{$_('balatro.rarities.common')}" colour="#009dff" shadowColour="#007ecc" />
+                    <Tag text={$_('balatro.rarities.common')} colour="#009dff" shadowColour="#007ecc" />
                 {:else if jokerRarity == 2}
-                    <Tag text="{$_('balatro.rarities.uncommon')}" colour="#4BC292" shadowColour="#3c9b75" />
+                    <Tag text={$_('balatro.rarities.uncommon')} colour="#4BC292" shadowColour="#3c9b75" />
                 {:else if jokerRarity == 3}
-                    <Tag text="{$_('balatro.rarities.rare')}" colour="#fe5f55" shadowColour="#cb4c44" />
+                    <Tag text={$_('balatro.rarities.rare')} colour="#fe5f55" shadowColour="#cb4c44" />
                 {:else if jokerRarity == 4}
-                    <Tag text="{$_('balatro.rarities.legendary')}" colour="#b26cbb" shadowColour="#8e5696"  />
+                    <Tag text={$_('balatro.rarities.legendary')} colour="#b26cbb" shadowColour="#8e5696"  />
                 {/if}
             </CardDescription>
         </div>

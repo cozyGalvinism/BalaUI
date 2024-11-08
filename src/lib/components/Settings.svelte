@@ -14,12 +14,12 @@
 <div>
     <ul class="m6x11plus flex flex-row gap-4 text-2xl">
         <li>
-            <button name="crt" on:click={toggleCrt}>
+            <button name="crt" onclick={toggleCrt}>
                 <span class="{$settings.crt ? 'text-green-500' : 'text-red-500'}">{$_('settings.crt')}</span>
             </button>
         </li>
         <li>
-            <button name="smoothBackground" on:click={toggleSmoothBackground}>
+            <button name="smoothBackground" onclick={toggleSmoothBackground}>
                 <span class="{$settings.smoothBackground ? 'text-green-500' : 'text-red-500'}">{$_('settings.smoothBackground')}</span>
             </button>
         </li>

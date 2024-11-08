@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
+
     import { localeList, toShareCode, type CodeFile, type DeckData } from "$lib"
     import { LabelField, TabbedHighlight, Button, LabelDropdown, Tag, CardDescription, ImageDrop, LabelCheckbox, LabelNumberInput, LabelTextArea } from "$lib/components"
     import lua from "svelte-highlight/languages/lua"
@@ -8,35 +10,38 @@
     import { _ } from 'svelte-i18n'
     import { goto } from "$app/navigation"
 
-    export let initialDeckData: DeckData | null = null;
+    interface Props {
+        initialDeckData?: DeckData | null;
+    }
+
+    let { initialDeckData = null }: Props = $props();
     let code = '';
 
-    let deckKey = initialDeckData?.key ?? 'replace_me'
-    let deckLocName = initialDeckData?.locName ?? 'Red Deck'
-    let deckLocText = initialDeckData?.locText ?? '{C:mult}+1{} discard\nevery round'
-    let deckPosX = initialDeckData?.posX ?? 0
-    let deckPosY = initialDeckData?.posY ?? 0
-    let deckAtlas = initialDeckData?.atlas ?? ''
-    let deckUnlocked = initialDeckData?.unlocked ?? true
-    let deckDiscovered = initialDeckData?.discovered ?? false
-    let deckPreviewVariables = initialDeckData?.previewVariables ?? []
-    let deckLocalizationEntries = initialDeckData?.localization ?? []
+    let deckKey = $state(initialDeckData?.key ?? 'replace_me')
+    let deckLocName = $state(initialDeckData?.locName ?? 'Red Deck')
+    let deckLocText = $state(initialDeckData?.locText ?? '{C:mult}+1{} discard\nevery round')
+    let deckPosX = $state(initialDeckData?.posX ?? 0)
+    let deckPosY = $state(initialDeckData?.posY ?? 0)
+    let deckAtlas = $state(initialDeckData?.atlas ?? '')
+    let deckUnlocked = $state(initialDeckData?.unlocked ?? true)
+    let deckDiscovered = $state(initialDeckData?.discovered ?? false)
+    let deckPreviewVariables = $state(initialDeckData?.previewVariables ?? [])
+    let deckLocalizationEntries = $state(initialDeckData?.localization ?? [])
 
-    let activeTabValue: number
+    let activeTabValue: number = $state(0)
 
-    let resolvedLocText = '';
-    $: {
-        resolvedLocText = deckLocText;
+    let resolvedLocText = $derived.by(() => {
+        let resolvedLocText = deckLocText;
 
         deckPreviewVariables.forEach((variable, index) => {
             resolvedLocText = resolvedLocText.replace(new RegExp(`#${index + 1}#`, 'g'), variable.value);
         });
-    }
 
-    let codePreview = ''
-    let previewFiles: CodeFile[] = []
-    $: {
-        codePreview = `--- STEAMODDED HEADER
+        return resolvedLocText;
+    });
+
+    let codePreview = $derived.by(() => {
+        let codePreview = `--- STEAMODDED HEADER
 --- MOD_NAME: MyMod
 --- MOD_ID: MyMod
 --- MOD_AUTHOR: [Your Name]
@@ -82,7 +87,10 @@ SMODS.Back{
 ----------------------------------------------
 ------------MOD CODE END----------------------`
 
-        previewFiles = [
+        return codePreview
+    });
+    let previewFiles: CodeFile[] = $derived.by(() => {
+        let previewFiles = [
             {
                 fileName: 'MyMod/MyMod.lua',
                 content: codePreview,
@@ -118,8 +126,10 @@ SMODS.Back{
                     lang: json
                 }
             })
-        ]
-    }
+        ];
+
+        return previewFiles;
+    });
 
     function addVariable() {
         deckPreviewVariables = [...deckPreviewVariables, { name: '', value: '' }];
@@ -221,31 +231,31 @@ SMODS.Back{
 
 <div class="flex flex-row gap-2">
     <div class="text-2xl flex-1 flex flex-col gap-1">
-        <LabelField name="deckKey" label="{$_('editor.key')}" bind:value={deckKey} on:input={updateShareCode} />
-        <LabelField name="deckLocName" label="{$_('editor.name')}" bind:value={deckLocName} on:input={updateShareCode} />
-        <LabelTextArea name="deckLocText" label="{$_('editor.description')}" bind:value={deckLocText} on:input={updateShareCode} />
-        <LabelField name="deckAtlas" label="{$_('editor.atlas')}" bind:value={deckAtlas} on:input={updateShareCode} />
+        <LabelField name="deckKey" label={$_('editor.key')} bind:value={deckKey} onInput={updateShareCode} />
+        <LabelField name="deckLocName" label={$_('editor.name')} bind:value={deckLocName} onInput={updateShareCode} />
+        <LabelTextArea name="deckLocText" label={$_('editor.description')} bind:value={deckLocText} onInput={updateShareCode} />
+        <LabelField name="deckAtlas" label={$_('editor.atlas')} bind:value={deckAtlas} onInput={updateShareCode} />
         <div class="flex flex-row gap-4">
-            <LabelNumberInput name="deckPosX" label="{$_('editor.atlasX')}" bind:value={deckPosX} on:input={updateShareCode} />
-            <LabelNumberInput name="deckPosY" label="{$_('editor.atlasY')}" bind:value={deckPosY} on:input={updateShareCode} />
+            <LabelNumberInput name="deckPosX" label={$_('editor.atlasX')} bind:value={deckPosX} onInput={updateShareCode} />
+            <LabelNumberInput name="deckPosY" label={$_('editor.atlasY')} bind:value={deckPosY} onInput={updateShareCode} />
         </div>
 
-        <LabelCheckbox name="deckUnlocked" label="{$_('editor.unlocked')}" bind:value={deckUnlocked} on:change={updateShareCode} />
-        <LabelCheckbox name="deckDiscovered" label="{$_('editor.discovered')}" bind:value={deckDiscovered} on:change={updateShareCode} />
+        <LabelCheckbox name="deckUnlocked" label={$_('editor.unlocked')} bind:value={deckUnlocked} onChange={updateShareCode} />
+        <LabelCheckbox name="deckDiscovered" label={$_('editor.discovered')} bind:value={deckDiscovered} onChange={updateShareCode} />
 
         <p class="mt-2 text-3xl">{$_('editor.localization.title')}</p>
         <div class="flex flex-col gap-2">
             {#each deckLocalizationEntries as entry, i}
                 <div class="flex flex-col gap-2">
-                    <LabelDropdown name="deckLocalizationEntry_{i}_locale" label="{$_('editor.localization.locale')}" bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} on:change={() => {
+                    <LabelDropdown name="deckLocalizationEntry_{i}_locale" label={$_('editor.localization.locale')} bind:value={entry.locale} options={localeList.map((loc) => { return { label: loc, value: loc }})} onChange={() => {
                         deckLocalizationEntries = deckLocalizationEntries
                         updateShareCode()
                     }} />
-                    <LabelField name="deckLocalizationEntry_{i}_name" label="{$_('editor.name')}" on:input={() => {
+                    <LabelField name="deckLocalizationEntry_{i}_name" label={$_('editor.name')} onInput={() => {
                         deckLocalizationEntries = deckLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.name} />
-                    <LabelTextArea name="deckLocalizationEntry_{i}_text" label="{$_('editor.description')}" on:input={() => {
+                    <LabelTextArea name="deckLocalizationEntry_{i}_text" label={$_('editor.description')} onInput={() => {
                         deckLocalizationEntries = deckLocalizationEntries
                         updateShareCode()
                     }} bind:value={entry.text} />
@@ -266,17 +276,19 @@ SMODS.Back{
         <div class="flex flex-col gap-2">
             {#each deckPreviewVariables as variable, i}
                 <div class="flex flex-row gap-4">
-                    <LabelField name="consumableVariable_{i}_name" label="{$_('editor.name')}" on:input={() => {
+                    <LabelField name="consumableVariable_{i}_name" label={$_('editor.name')} onInput={() => {
                         deckPreviewVariables = deckPreviewVariables
                         updateShareCode()
                     }} bind:value={variable.name} />
-                    <LabelField name="consumableVariable_{i}" label="{$_('editor.value')}" on:input={() => {
+                    <LabelField name="consumableVariable_{i}" label={$_('editor.value')} onInput={() => {
                         deckPreviewVariables = deckPreviewVariables
                         updateShareCode()
                     }} bind:value={variable.value}>
-                        <Button slot="after-input" class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
+                        {#snippet afterInput()}
+                        <Button class="text-base h-8 leading-4" name="removeVariable_{i}" color="#FE5F55" hoverColor="#fe6f66" activeColor="#cb4c44" action={() => removeVariable(i)}>
                             {$_('editor.variables.remove')}
                         </Button>
+                        {/snippet}
                     </LabelField>
                 </div>
             {/each}

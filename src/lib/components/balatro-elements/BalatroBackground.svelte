@@ -1,18 +1,20 @@
 <script lang="ts">
-  import {
-    WebGLRenderer,
-    ShaderMaterial,
-    Color,
-    Scene,
-    Camera,
-    PlaneGeometry,
-    Vector4,
-    Vector2,
-    Mesh,
-  } from "three";
-  import { onMount } from "svelte";
+    import { run } from 'svelte/legacy'
 
-  const fragmentShader = `
+    import {
+        WebGLRenderer,
+        ShaderMaterial,
+        Color,
+        Scene,
+        Camera,
+        PlaneGeometry,
+        Vector4,
+        Vector2,
+        Mesh,
+    } from 'three'
+    import { onMount } from 'svelte'
+
+    const fragmentShader = `
 precision mediump float;
 uniform float time;
 uniform float spin_time;
@@ -56,98 +58,133 @@ void main() {
 
     gl_FragColor = ret_col;
 }
-`;
+`
 
-  let canvas: HTMLCanvasElement;
-  let material: ShaderMaterial;
-
-  function colourToVec4(colour: Vector4 | string) {
-    if (typeof colour === "string") {
-      const c = new Color(colour);
-      return new Vector4(c.r, c.g, c.b, 1.0);
+    interface Props {
+        colour1?: Vector4 | string
+        colour2?: Vector4 | string
+        colour3?: Vector4 | string
+        contrast?: number
+        spinAmount?: number
+        pixelate?: boolean
     }
 
-    return colour;
-  }
+    let {
+        colour1 = new Vector4(1.0, 0.3725490196, 0.3333333333, 1.0),
+        colour2 = new Vector4(0.0, 0.6156862745, 1.0, 1.0),
+        colour3 = new Vector4(0.2156862745, 0.2588235294, 0.2666666667, 1.0),
+        contrast = 3.0,
+        spinAmount = 0.3,
+        pixelate = true,
+    }: Props = $props()
 
-  export let colour1: Vector4 | string = new Vector4(1.0, 0.3725490196, 0.3333333333, 1.0);
-  export let colour2: Vector4 | string = new Vector4(0.0, 0.6156862745, 1.0, 1.0);
-  export let colour3: Vector4 | string = new Vector4(0.2156862745, 0.2588235294, 0.2666666667, 1.0);
-  export let contrast = 3.0;
-  export let spinAmount = 0.3;
-  export let pixelate = true;
-
-  onMount(() => {
-    const scene = new Scene();
-    const camera = new Camera();
-
-    const geometry = new PlaneGeometry(2, 2);
-
-    material = new ShaderMaterial({
-      uniforms: {
-        time: { value: 0.0 },
-        spin_time: { value: 0.0 },
-        colour_1: { value: colourToVec4(colour1) }, // C
-        colour_2: { value: colourToVec4(colour2) }, // L
-        colour_3: {
-          value: colourToVec4(colour3),
-        }, // D
-        contrast: { value: contrast },
-        spin_amount: { value: spinAmount },
-        resolution: {
-          value: new Vector2(window.innerWidth, window.innerHeight),
-        },
-        pixelate: { value: pixelate },
-      },
-      vertexShader: `
+    let canvas: HTMLCanvasElement
+    let material: ShaderMaterial = $state(
+        new ShaderMaterial({
+            uniforms: {
+                time: { value: 0.0 },
+                spin_time: { value: 0.0 },
+                colour_1: { value: colourToVec4(colour1) }, // C
+                colour_2: { value: colourToVec4(colour2) }, // L
+                colour_3: {
+                    value: colourToVec4(colour3),
+                }, // D
+                contrast: { value: contrast },
+                spin_amount: { value: spinAmount },
+                resolution: {
+                    value: new Vector2(1, 1),
+                },
+                pixelate: { value: pixelate },
+            },
+            vertexShader: `
         void main() {
           gl_Position = vec4(position, 1.0);
         }
       `,
-      fragmentShader: fragmentShader,
-    });
+            fragmentShader: fragmentShader,
+        })
+    )
 
-    const mesh = new Mesh(geometry, material);
-    scene.add(mesh);
+    function colourToVec4(colour: Vector4 | string) {
+        if (typeof colour === 'string') {
+            const c = new Color(colour)
+            return new Vector4(c.r, c.g, c.b, 1.0)
+        }
 
-    const renderer = new WebGLRenderer({ canvas });
-
-    const resize = () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      material.uniforms.resolution.value.set(
-        window.innerWidth,
-        window.innerHeight
-      );
-    };
-
-    const animate = () => {
-      material.uniforms.time.value += 1 / 120;
-      material.uniforms.spin_time.value += 1 / 120;
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    };
-
-    resize();
-    animate();
-
-
-    window.addEventListener("resize", resize);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-    };
-  });
-
-  $: {
-    if (material) {
-      material.uniforms.pixelate.value = pixelate;
-      material.uniforms.colour_1.value = colourToVec4(colour1);
-      material.uniforms.colour_2.value = colourToVec4(colour2);
-      material.uniforms.colour_3.value = colourToVec4(colour3);
-      material.uniforms.contrast.value = contrast;
-      material.uniforms.spin_amount.value = spinAmount;
+        return colour
     }
-  }
+
+    onMount(() => {
+        const scene = new Scene()
+        const camera = new Camera()
+
+        const geometry = new PlaneGeometry(2, 2)
+
+        material = new ShaderMaterial({
+            uniforms: {
+                time: { value: 0.0 },
+                spin_time: { value: 0.0 },
+                colour_1: { value: colourToVec4(colour1) }, // C
+                colour_2: { value: colourToVec4(colour2) }, // L
+                colour_3: {
+                    value: colourToVec4(colour3),
+                }, // D
+                contrast: { value: contrast },
+                spin_amount: { value: spinAmount },
+                resolution: {
+                    value: new Vector2(window.innerWidth, window.innerHeight),
+                },
+                pixelate: { value: pixelate },
+            },
+            vertexShader: `
+        void main() {
+          gl_Position = vec4(position, 1.0);
+        }
+      `,
+            fragmentShader: fragmentShader,
+        })
+
+        const mesh = new Mesh(geometry, material)
+        scene.add(mesh)
+
+        const renderer = new WebGLRenderer({ canvas })
+
+        const resize = () => {
+            renderer.setSize(window.innerWidth, window.innerHeight)
+            material.uniforms.resolution.value.set(
+                window.innerWidth,
+                window.innerHeight
+            )
+        }
+
+        const animate = () => {
+            material.uniforms.time.value += 1 / 120
+            material.uniforms.spin_time.value += 1 / 120
+            renderer.render(scene, camera)
+            requestAnimationFrame(animate)
+        }
+
+        resize()
+        animate()
+
+        window.addEventListener('resize', resize)
+
+        return () => {
+            window.removeEventListener('resize', resize)
+        }
+    })
+
+    $effect(() => {
+        if (material) {
+            material.uniforms.pixelate.value = pixelate
+            material.uniforms.colour_1.value = colourToVec4(colour1)
+            material.uniforms.colour_2.value = colourToVec4(colour2)
+            material.uniforms.colour_3.value = colourToVec4(colour3)
+            material.uniforms.contrast.value = contrast
+            material.uniforms.spin_amount.value = spinAmount
+        }
+    })
 </script>
 
-<canvas bind:this={canvas} class="fixed top-0 left-0 w-full h-full -z-10" />
+<canvas bind:this={canvas} class="fixed top-0 left-0 w-full h-full -z-10"
+></canvas>
